@@ -1,0 +1,75 @@
+name: Update filters
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    # Every day at 08:00 AM
+    - cron:  '0 8 * * *'
+
+jobs:
+  check:
+    name: Check filters update
+    runs-on: ubuntu-latest
+    outputs:
+      need_update: ${{ steps.diff.outputs.results }}
+    steps:
+      - name: Setup dependencies
+        run: sudo apt-get -y install cabextract
+
+      - uses: actions/checkout@v2
+
+      - name: Update filters
+        run: bash update.sh
+
+      - name: git diff and set output
+        id: diff
+        run: |
+          # Ignore diff exit code
+          set +e
+          git diff --exit-code --quiet
+          echo "::set-output name=results::$?"
+  update:
+    runs-on: ubuntu-latest
+    name: Commit filters update
+    needs: [ check ]
+    if: needs.check.outputs.need_update == 1
+    steps:
+      - name: Setup dependencies
+        run: sudo apt-get -y install cabextract
+
+      - uses: actions/checkout@v2
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Create Branch
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: bump-${{ steps.date.outputs.date }}
+
+      - uses: actions/checkout@v2
+        with:
+          ref: bump-${{ steps.date.outputs.date }}
+
+      - name: Update filters
+        run: bash update.sh
+
+      - name: Add & Commit
+        uses: EndBug/add-and-commit@v7.5.0
+        with:
+          branch: bump-${{ steps.date.outputs.date }}
+          message: 'Update filters (${{ steps.date.outputs.date }})'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Github Pull Request
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: bump-${{ steps.date.outputs.date }}
+          destination_branch: master
+          pr_title: 'Update filters (${{ steps.date.outputs.date }})'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
