@@ -63,7 +63,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T23:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 5973 v2.
+-- Inserting filter 5973 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -78,18 +78,18 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5973 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5973 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(5973, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HCK Errata: INF Syntax Test is failing for invalid language ID', 'This test is can not recognize the language ID of Serbian-Latin (0x241a) and it is failing due to this language ID.
+	VALUES(5973, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HCK Errata: INF Syntax Test is failing for invalid language ID', 'This test is can not recognize the language ID of Serbian-Latin (0x241a) and it is failing due to this language ID.
 
 This test should pass as the language ID is valid as per the "Windows Language Code Identifier Reference" document.', 'Fixed with tests bundled with RS1 release', '2023-10-09T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v6.3 Server x64"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v6.3 Server x64","Windows 8 Server x64"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -23332,7 +23332,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 33734 v9.
+-- Inserting filter 33734 v10.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -23347,11 +23347,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 33734 AND Version = 9
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 33734 AND Version = 10
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(33734, 9, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: Bluetooth - Optional - HciExtension1 (Bring Up): HciExtensions tests for incorrect feature bits', 'This HLK test checks to make sure the HW returns to us a bitmask, with the required supported features set to 1. In later OS releases, we added a new feature, but did not update the HLK test to check for this bit in the HW provided bitmask, causing a failure.', 'This errata allows IHVs who run the HLK tests to support the extra feature and pass the HLK test.', '2029-07-30T23:59:00')
+	VALUES(33734, 10, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: Bluetooth - Optional - HciExtension1 (Bring Up): HciExtensions tests for incorrect feature bits', 'This HLK test checks to make sure the HW returns to us a bitmask, with the required supported features set to 1. In later OS releases, we added a new feature, but did not update the HLK test to check for this bit in the HW provided bitmask, causing a failure.', 'This errata allows IHVs who run the HLK tests to support the extra feature and pass the HLK test.', '2029-07-30T23:59:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -23385,11 +23385,15 @@ BEGIN
 
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Msg', 'EndTest', 'Radio reported supported features as: 0x000000000000047F....', 'UserText', 0, 0, @ParentLogNodeId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Radio reported supported features as: 0x000000000000027F', 'UserText', 0, 0, @ParentLogNodeId)
 
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Msg', 'EndTest', 'Radio reported supported features as: 0x000000000000027F', 'UserText', 0, 0, @ParentLogNodeId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Radio reported supported features as: 0x000000000000047F', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest', '0000000000000000000000000000000000000000000000000000010000000000', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
@@ -41132,7 +41136,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 80447 v2.
+-- Inserting filter 80447 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -41147,11 +41151,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 80447 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 80447 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(80447, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WLAN Wake - Packet Tests - Functional failed for Device power off more than 2 times during CS session', 'There is a HLK infrastructure issue which DUT''s HLKSVC keep sending unexpected name query packets though the current available connection during test run. This issue keep bring the new S0Idle power mode based wlan driver wake.', 'Needs to filter out the Power cycle count failture from the test result.', '2023-05-17T00:00:00')
+	VALUES(80447, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WLAN Wake - Packet Tests - Functional failed for Device power off more than 2 times during CS session', 'There is a HLK infrastructure issue which DUT''s HLKSVC keep sending unexpected name query packets though the current available connection during test run. This issue keep bring the new S0Idle power mode based wlan driver wake.', 'Needs to filter out the Power cycle count failture from the test result.', '2024-05-17T00:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -41181,7 +41185,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-05-17T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-17T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 80453 v3.
 SET @TestCommandLineId = NULL
