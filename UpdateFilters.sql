@@ -8506,6 +8506,44 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-02-28T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 3497 v3.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'groupsize.exe -ValidateMultipleGroupsExist'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('groupsize.exe -ValidateMultipleGroupsExist')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 3497 AND Version = 3
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(3497, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'The Multiple Processor group device test may improperly fail', 'The Multiple Processor Group Device Test may improperly fail. The setup instructions are unclear and if followed may cause a loss of network access. This test may fail with the message, ValidateMultipleGroupsExist - Failure: Expected more than one active processor group, but found only one…', 'This issue is an acceptable failure.', '2023-10-10T01:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["8.100.9600"]}')
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows 8 Server x64","Windows v6.3 Server x64"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'Error:UserText=ValidateMultipleGroupsExist - Failure: Expected more than one active processor group, but found only one', 'ValidateMultipleGroupsExist - Failure: Expected more than one active processor group, but found only one', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-10-10T01:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 3484 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -49337,6 +49375,65 @@ BEGIN
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 93024 v4.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash mediacapturecpptest.dll /name:MediaCapture::Tests::CPP::TaefMediaCaptureCppTests::TestMediaCaptureScenarios'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash mediacapturecpptest.dll /name:MediaCapture::Tests::CPP::TaefMediaCaptureCppTests::TestMediaCaptureScenarios')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 93024 AND Version = 4
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(93024, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'MediaCaptureScenarios Low Lag tests fail to set warmstart when streaming is off', 'LowLag Tests inside MediaCaptureScenarios try to toggle the warmstart control while streaming is still occuring. This creates a valid failure from the device that the test incorrectly assumes is a test failure', 'Errata Issued, OS to be Updated', '2024-04-30T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=.*', '.*LowLagVideoCapture.*PauseWithoutResume.*', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Warn', 'EndTest:Title=.*', '.*80070016.*FinishAsync.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 2
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Msg:UserText=.*', 'Test .* hr = 0xA0000002', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 2
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=.*', '.*PhotoSequence.*InvalidAPICallDuringCapture2.*', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest:Title=.*', 'Test failed with unexpected exception', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-04-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 93030 v3.
 SET @TestCommandLineId = NULL
