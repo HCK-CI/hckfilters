@@ -269,6 +269,41 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2027-06-30T11:37:47' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 5915 v7.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /inproc /enablewttlogging /appendwttlogging devfund.memorytest.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /inproc /enablewttlogging /appendwttlogging devfund.memorytest.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5915 AND Version = 7
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(5915, 7, 1, 1, 0, 1, 0, 0, @TestCommandLineId, 'HCK Driver Memory test fails with no log file', 'Win8.1 memory test fails to produce log files', 'Ignore missing log file errors', '2023-10-09T19:30:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v6.3 Server x64","Windows 8 Server x64"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'This is a dummy constraint meant to prevent this filter from applying to results that have log files.', 'Title', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-10-09T19:30:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 5912 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -1495,6 +1530,84 @@ BEGIN
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 132 v3.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe%Devfund_PnPDTest%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe%Devfund_PnPDTest%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 132 AND Version = 3
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(132, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'PnP Driver Test - Insufficient resources error - EDT device opened , but request failed Win32=1450', '"Plug and Play Driver Test (Certification)" sends hundreds of IRP_MJ_CREATE requests in a sequence before it sends hundreds of IRP_MJ_CLOSE requests. This results in “insufficient resources” errors when devices with protocols defining open handle limitations reach their limitation.  Test will fail with “EDT device opened , but request failed Win32=1450 - Insufficient system resources exist to complete the requested service” error message.
+
+', 'This filter will resolve the issue described. There are no plans to fix this issue in the test. ', '2026-10-13T01:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v6.3 Server x64"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'DevfundTests.PNPDTest.PNPTryStopAndRestartDevice', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest:Title=DevfundTests.PNPDTest.PNPTryStopAndRestartDevice', '.*EDT device opened , but request failed.*Insufficient system resources exist to complete the requested service.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'DevfundTests.PNPDTest.PNPTryStopDeviceRequestNewResourcesAndRestartDevice', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest:Title=DevfundTests.PNPDTest.PNPTryStopDeviceRequestNewResourcesAndRestartDevice', '.*EDT device opened , but request failed.*Insufficient system resources exist to complete the requested service.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'DevfundTests.PNPDTest.PNPDisableAndEnableDevice', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest:Title=DevfundTests.PNPDTest.PNPDisableAndEnableDevice', '.*EDT device opened , but request failed.*Insufficient system resources exist to complete the requested service.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'DevfundTests.PNPDTest.PNPTryStopDeviceAndFailRestart', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest:Title=DevfundTests.PNPDTest.PNPTryStopDeviceAndFailRestart', '.*EDT device opened , but request failed.*Insufficient system resources exist to complete the requested service.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-10-13T01:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 115 v5.
 SET @TestCommandLineId = NULL
@@ -5594,7 +5707,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 5356 v4.
+-- Inserting filter 5356 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -5609,20 +5722,20 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5356 AND Version = 4
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5356 AND Version = 5
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(5356, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HCK ERRATA: Failing the DF - PNP Rebalance Fail Restart Device Test (Certification) & Surprise Remove Device Test (Certification) running on QFE12.', 'After investigating the failures seen in these tests:
+	VALUES(5356, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HCK ERRATA: Failing the DF - PNP Rebalance Fail Restart Device Test (Certification) & Surprise Remove Device Test (Certification) running on QFE12.', 'After investigating the failures seen in these tests:
 DF - PNP Rebalance Fail Restart Device Test (Certification)
 DF - PNP Surprise Remove Device Test (Certification)
 
-It has been confirmed that QFE12 is broken.', 'This is an acceptable failure until QFE12 is fixed. ', '2023-12-31T00:00:00')
+It has been confirmed that QFE12 is broken.', 'This is an acceptable failure until QFE12 is fixed. ', '2026-10-13T01:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows 8 Client x86","Windows 8 Client x64","Windows 7 Client x86","Windows 7 Client x64","Windows Server 2008 x86","Windows Server 2008 x64","Windows Server 2008 Release 2 x64","Windows 8 Server x64","Windows v6.3 Client x86","Windows v6.3 Client x64","Windows v6.3 Server x64"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v6.3 Server x64"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -5699,7 +5812,7 @@ It has been confirmed that QFE12 is broken.', 'This is an acceptable failure unt
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-12-31T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-10-13T01:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 5346 v5.
 SET @TestCommandLineId = NULL
@@ -6700,6 +6813,62 @@ BEGIN
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-31T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 5157 v2.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /inproc /enablewttlogging /appendwttlogging DevFundInfTest.dll /p:"WDKInfPath=[WDKInfPath]" /p:"FullDriverInf=[FullDriverInf]" /p:"queryIsInbox=[queryIsInbox]"'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /inproc /enablewttlogging /appendwttlogging DevFundInfTest.dll /p:"WDKInfPath=[WDKInfPath]" /p:"FullDriverInf=[FullDriverInf]" /p:"queryIsInbox=[queryIsInbox]"')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5157 AND Version = 2
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(5157, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HCK Errata:  CHKINF utility is run against the driver’s INF file, it reports errors on VD3D display drivers', 'The CHKINF complains about the use of the DELFLG_IN_USE1 flag. According to MSDN , the flag is valid:
+ 
+0x00010000 (DELFLG_IN_USE1)
+ 
+(Windows 2000 or later versions of Windows) This flag is a high-word version of the DELFLG_IN_USE flag, and it has the same purpose and effect. This flag should be used in only for installations on NT-based systems.
+', 'This is an acceptable failure for now', '2023-10-09T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v6.3 Server x64","Windows 8 Server x64"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'DevFund.DevFundProperInfTest.ExecuteCheckInf', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'End', '|Bad value for flags \(81920\) in vd3d.Display.', 'UserText', 0, 0, @ParentLogNodeId)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 2
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', '|Bad value for flags \(81920\) in vd3d.DispWow', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 2
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-10-09T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 5122 v1.
 SET @TestCommandLineId = NULL
@@ -46810,7 +46979,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 86202 v1.
+-- Inserting filter 86202 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -46825,16 +46994,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 86202 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 86202 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(86202, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata: NVME SCSI Compliance HISUP Support', 'HISUP Support can be different depending on which version of NVMe SCSI Translation Guide is being followed', 'Filter out HISUP error messages', '2029-12-30T16:00:00')
+	VALUES(86202, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata: NVME SCSI Compliance HISUP Support', 'HISUP Support can be different depending on which version of NVMe SCSI Translation Guide is being followed', 'Filter out HISUP error messages', '2031-10-13T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.17763"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.17763","10.1.20348"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -46859,7 +47028,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2031-10-13T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 86304 v3.
 SET @TestCommandLineId = NULL
@@ -49659,7 +49828,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-09-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 94828 v2.
+-- Inserting filter 94828 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -49674,11 +49843,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 94828 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 94828 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(94828, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: GetRasterStatus and GetRasterStatus (WoW64) test failures for headless dGPU', 'HLK Errata: GetRasterStatus and GetRasterStatus (WoW64) test failures for headless dGPU', 'This filter removes it for this special case.', '2024-12-30T16:00:00')
+	VALUES(94828, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: GetRasterStatus and GetRasterStatus (WoW64) test failures for headless dGPU', 'HLK Errata: GetRasterStatus and GetRasterStatus (WoW64) test failures for headless dGPU', 'This filter removes it for this special case.', '2024-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -49686,7 +49855,7 @@ BEGIN
 	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_1002&DEV_73A1'') or contains (.,''PCI\VEN_1002&DEV_73A3'')])')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.19041","10.1.17763","10.1.22000"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.19041","10.1.17763","10.1.22000","10.1.22621","10.1.20348"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -49872,7 +50041,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-10-09T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 95501 v3.
+-- Inserting filter 95501 v4.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -49887,11 +50056,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 95501 AND Version = 3
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 95501 AND Version = 4
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(95501, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: USB Serial Number Test failure', 'HLK Errata: USB Serial Number Test failure', 'This is acceptable test failure', '2023-10-09T17:00:00')
+	VALUES(95501, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: USB Serial Number Test failure', 'HLK Errata: USB Serial Number Test failure', 'This is acceptable test failure', '2023-10-09T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -49903,7 +50072,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 ', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Co Full"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Co Full","Windows v10.0 Client x64 Ni Full"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -50529,7 +50698,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-02-08T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 96503 v2.
+-- Inserting filter 96503 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -50544,19 +50713,19 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 96503 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 96503 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(96503, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: D3D12 - 11 on 12 - WGF11 D3DWDDM test failures for headless dGPU', 'HLK Errata: D3D12 - 11 on 12 - WGF11 D3DWDDM test failures for headless dGPU', 'This filter removes it for this special case.', '2024-12-30T16:00:00')
+	VALUES(96503, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: D3D12 - 11 on 12 - WGF11 D3DWDDM test failures for headless dGPU', 'HLK Errata: D3D12 - 11 on 12 - WGF11 D3DWDDM test failures for headless dGPU', 'This filter removes it for this special case.', '2024-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_1002&DEV_73A1'') or contains (.,''PCI\VEN_1002&DEV_73A3'')])')
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_1002'')])')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Vb Full","Windows v10.0 Client x64 Co Full"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Vb Full","Windows v10.0 Client x64 Co Full","Windows v10.0 Client x64 Ni Full","Windows v10.0 Server x64 Fe Full"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -55514,6 +55683,44 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
 	VALUES(@FilterId, 2, 'boolean(//Device[starts-with(@HardwareID,"PCI\VEN_10DE")])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'IsHwFlipQueueStableOrAlwaysOn', 'Title', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-11-26T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 127669 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash featurecheck.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash featurecheck.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 127669 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(127669, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: WDDM 3.0 Hardware Flip Queue Check - FeatureCheck::IsHwFlipQueueStableOrAlwaysOn', 'This is a by design HLK test failure that allows Microsoft to control whether an IHV is allowed to enable HwFlipQueue feature. Now that the IHV passed the quality bar, we need to grant a corresponding errata.', 'This is a by design HLK test failure that allows Microsoft to control whether an IHV is allowed to enable HwFlipQueue feature. Now that the IHV passed the quality bar, we need to grant a corresponding errata.', '2024-11-26T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Device[starts-with(@HardwareID,"PCI\VEN_8086")])', @GathererTypeId)
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
