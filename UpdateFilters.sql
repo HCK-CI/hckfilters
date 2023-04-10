@@ -31397,7 +31397,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-03-31T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 48650 v3.
+-- Inserting filter 48650 v4.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -31412,16 +31412,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 48650 AND Version = 3
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 48650 AND Version = 4
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(48650, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Conf_Video9on12::VideoProcessorBlt#D3D12Driver Fails with E_INVALIDARG from VideoProcessBltHD', 'The D3D9on12 implementation ignored driver state sets.', 'Fixed in Vibranium', '2025-03-31T00:00:00')
+	VALUES(48650, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Conf_Video9on12::VideoProcessorBlt#D3D12Driver Fails with E_INVALIDARG from VideoProcessBltHD', 'The D3D9on12 implementation ignored driver state sets.', 'Fixed in Vibranium', '2025-03-31T00:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.18362","10.1.19041"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.18362","10.1.19041","10.1.20348"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -54378,7 +54378,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 115756 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(115756, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: INF Syntax Test failures with v4 Printer Driver', 'HLK Errata: INF Syntax Test failures with v4 Printer Driver', 'This is acceptable failures.', '2023-12-30T16:00:00')
+	VALUES(115756, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: INF Syntax Test failures with v4 Printer Driver', 'HLK Errata: INF Syntax Test failures with v4 Printer Driver', 'This is acceptable failures.', '2029-01-08T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -54395,9 +54395,9 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-01-08T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 115994 v6.
+-- Inserting filter 115994 v7.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -54412,11 +54412,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 115994 AND Version = 6
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 115994 AND Version = 7
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(115994, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'HW-DRM - Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'This is an acceptable failure for now.', '2023-12-31T16:00:00')
+	VALUES(115994, 7, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'HW-DRM - Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'This is an acceptable failure for now.', '2023-12-31T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -54424,7 +54424,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Devnode[contains(.,''PCI\VEN_1002&DEV_73BF'') or contains(.,''PCI\VEN_1002&DEV_744C'') or contains(.,''PCI\VEN_1002&DEV_7480'') or contains(.,''PCI\VEN_1002&DEV_7483'') or contains(.,''PCI\VEN_1002&DEV_73C8'') or contains(.,''PCI\VEN_1002&DEV_15C8'') or contains(.,''PCI\VEN_1002&DEV_7448'')])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode[contains(.,''PCI\VEN_1002&DEV_73BF'') or contains(.,''PCI\VEN_1002&DEV_744C'') or contains(.,''PCI\VEN_1002&DEV_7480'') or contains(.,''PCI\VEN_1002&DEV_7483'') or contains(.,''PCI\VEN_1002&DEV_73C8'') or contains(.,''PCI\VEN_1002&DEV_15C8'') or contains(.,''PCI\VEN_1002&DEV_73DF'') or contains(.,''PCI\VEN_1002&DEV_7448'')])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v10.0 Client x86 Ni Full","Windows v10.0 Client x64 Ni Full"]}')
