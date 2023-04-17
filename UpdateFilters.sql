@@ -21971,6 +21971,41 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2028-12-28T23:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 28654 v3.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%Logo3.exe -config ReportingRate%.json'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%Logo3.exe -config ReportingRate%.json')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 28654 AND Version = 3
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(28654, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata: Windows Touch Reporting Rate Test: Test fails if screen refresh rate >=120Hz', 'For 120Hz monitors, Touch Reporing Rate tests will fail unless touchscreen scan rate is &gt;= 120Hz <br xmlns="http://www.w3.org/1999/xhtml" /> This test was created before 120Hz touch-capable displays entered the market. For a monitor with that high of a refresh rate, a higher input rate is not strictly required for an acceptable experience.', 'If it is not possible to source a 120Hz touch panel for the best experience, we recommend selecting a 60Hz touch panel to allow for smoother panning and prediction (scalar multiple of the display refresh).', '2025-10-13T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.19041","10.1.17134","10.1.16299","10.1.15063"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Msg', '', 'Interaction 1, Error: Report delta too high. Refresh rate = 120Hz, Expected < 8333us, Actual = (?:\d{4}|1[0-5]\d{3}|16[0-5]\d{2}|166[0-5]\d|1666[0-7])us.', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-13T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 28980 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -34457,7 +34492,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 60458 AND Version = 4
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(60458, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Wave test fail when trying to test ACX Display Audio', 'Due to a test bug, Wave test fails to identify ACX display audio driver as a non-AVstream driver and doesn’t run any test cases.', 'This errata overturns the failure.', '2023-04-30T00:00:00')
+	VALUES(60458, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Wave test fail when trying to test ACX Display Audio', 'Due to a test bug, Wave test fails to identify ACX display audio driver as a non-AVstream driver and doesn’t run any test cases.', 'This errata overturns the failure.', '2025-10-14T00:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -34492,7 +34527,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-04-30T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-14T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 60604 v3.
 SET @TestCommandLineId = NULL
@@ -34513,7 +34548,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 60604 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(60604, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'KS Position test fail when trying to test ACX Display Audio', 'Due to a test bug, KS Position test fails to identify ACX display audio driver as a non-AVstream driver and doesn’t run any test cases.', 'This errata overturns the failure.', '2023-04-30T00:00:00')
+	VALUES(60604, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'KS Position test fail when trying to test ACX Display Audio', 'Due to a test bug, KS Position test fails to identify ACX display audio driver as a non-AVstream driver and doesn’t run any test cases.', 'This errata overturns the failure.', '2025-10-13T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -34548,7 +34583,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-04-30T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-13T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 60664 v3.
 SET @TestCommandLineId = NULL
