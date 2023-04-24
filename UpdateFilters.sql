@@ -4642,6 +4642,47 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-06-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 5609 v6.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'te.exe'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('te.exe')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5609 AND Version = 6
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(5609, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HCK Driver Memory Test: fails with "WDTF_TEST : The trace merge process is too long"', 'Driver memory test is failing with "WDTF_TEST : The trace merge process is too long"', 'Failure to be waived for HCK.', '2023-10-09T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":0,"Values":["8.100.9600.27024"]}')
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows 8 Server x64","Windows v6.3 Server x64"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'EndTest', 'The trace merge process is too long', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'EndError:UserText', '.*Setup fixture ''Setup'' for the scope ''Microsoft.WindowsLogoKits.DevFund.MemoryTest'' failed..*', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-10-09T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 5608 v12.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -48957,7 +48998,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 91345 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(91345, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'AudioLogo (system) enforces channel count on default mode', 'AudioLogo incorrectly enforces a channel count on default mode.', 'This errata overturns the failure.', '2023-04-30T17:00:00')
+	VALUES(91345, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'AudioLogo (system) enforces channel count on default mode', 'AudioLogo incorrectly enforces a channel count on default mode.', 'This errata overturns the failure.', '2023-12-31T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -48979,7 +49020,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-04-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-12-31T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 91401 v4.
 SET @TestCommandLineId = NULL
@@ -49145,7 +49186,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 91812 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(91812, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'AudioLogo (system) enforces channel count on default mode', 'AudioLogo incorrectly enforces a channel count on default mode.', 'This errata overturns the failure.', '2023-04-30T17:00:00')
+	VALUES(91812, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'AudioLogo (system) enforces channel count on default mode', 'AudioLogo incorrectly enforces a channel count on default mode.', 'This errata overturns the failure.', '2024-10-07T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -49164,7 +49205,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-04-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-10-07T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 91922 v3.
 SET @TestCommandLineId = NULL
@@ -55431,7 +55472,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-10-07T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 125554 v1.
+-- Inserting filter 125554 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -55446,26 +55487,20 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 125554 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 125554 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(125554, 1, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK AutoTriage: HAP test fails due to an issue with matching MM devices to driver instances.', 'HAP test fails due to an issue with matching MM devices to driver instances.', 'Please contact Microsoft Support to receive an updated test binary.', '2024-10-07T17:00:00')
+	VALUES(125554, 2, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK AutoTriage: HAP test fails due to an issue with matching MM devices to driver instances.', 'HAP test fails due to an issue with matching MM devices to driver instances.', 'Please, contact Microsoft to receive an updated test binary.', '2024-10-07T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
-IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
-		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
-	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
-	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Devnode/HardwareID[contains(.,"USB\VID_413C&PID_A518&MI_00") or contains(.,"USB\VID_413C&PID_A518&REV_0100&MI_00") or contains(.,"USB\VID_413C&PID_A518&REV_0100&MI_03") or contains(.,"USB\VID_413C&PID_A518&MI_03")])', @GathererTypeId)
-
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'Error', 'Error', 'AreEqual.*', 'UserText', 0, 1)
+	VALUES(@FilterId, 'Error', '', 'AreEqual.*', 'UserText', 0, 0)
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
 	VALUES(@FilterId, 'Error', 'Error', 'SUCCEEDED\(hr = DoesDeviceMatchInstanceId.*Value \(0x8000ffff\)', 'UserText', 0, 1)
@@ -55475,7 +55510,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-10-07T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 125623 v1.
+-- Inserting filter 125623 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -55490,36 +55525,30 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 125623 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 125623 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(125623, 1, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK AutoTriage: KS Position test fails due to an issue with matching MM devices to driver instances.', 'KS Position test fails due to an issue with matching MM devices to driver instances.', 'Please contact Microsoft Support to receive an updated test binary.', '2024-10-07T17:00:00')
+	VALUES(125623, 2, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK AutoTriage: KS Position test fails due to an issue with matching MM devices to driver instances.', 'KS Position test fails due to an issue with matching MM devices to driver instances.', 'Please, contact Microsoft to receive an updated test binary.', '2024-10-07T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
-IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
-		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
-	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
-	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Devnode/HardwareID[contains(.,"USB\VID_413C&PID_A518&MI_00") or contains(.,"USB\VID_413C&PID_A518&REV_0100&MI_00") or contains(.,"USB\VID_413C&PID_A518&REV_0100&MI_03") or contains(.,"USB\VID_413C&PID_A518&MI_03")])', @GathererTypeId)
-
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'Error', 'Error', 'AreEqual.*', 'UserText', 0, 1)
+	VALUES(@FilterId, 'Error', '', 'AreEqual.*', 'UserText', 0, 0)
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'Error', 'Error', 'SUCCEEDED\(CheckDeviceInstanceId.*Value \(0x8000ffff\)', 'UserText', 0, 1)
+	VALUES(@FilterId, 'Error', 'Error', 'SUCCEEDED\(CheckDeviceInstanceId.*Value \(0x8000ffff\)', 'UserText', 0, 0)
 
 	DELETE FROM @ParentNodes
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-10-07T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 125624 v1.
+-- Inserting filter 125624 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -55534,20 +55563,14 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 125624 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 125624 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(125624, 1, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK AutoTriage: [Test erratum] Wave test fails a topology walk if the topology has no instance ID', 'Wave test fails due to an issue with matching MM devices to driver instances.', 'Please contact Microsoft Support to receive an updated test binary.', '2024-10-07T17:00:00')
+	VALUES(125624, 2, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK AutoTriage: [Test erratum] Wave test fails a topology walk if the topology has no instance ID', 'Wave test fails due to an issue with matching MM devices to driver instances.', 'Please, contact Microsoft to receive an updated test binary.', '2024-10-07T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
-IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
-		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
-	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
-	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Devnode/HardwareID[contains(.,"USB\VID_413C&PID_A518&MI_00") or contains(.,"USB\VID_413C&PID_A518&REV_0100&MI_00") or contains(.,"USB\VID_413C&PID_A518&REV_0100&MI_03") or contains(.,"USB\VID_413C&PID_A518&MI_03")])', @GathererTypeId)
-
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
 
