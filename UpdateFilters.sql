@@ -48920,7 +48920,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 95232 v3.
+-- Inserting filter 95232 v4.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -48935,11 +48935,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 95232 AND Version = 3
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 95232 AND Version = 4
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(95232, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Manual errata: Bluetooth - L2CAP Performance (Reliability) test failure due to a 7F BSOD', 'Bluetooth - L2CAP Performance (Reliability) test failure due to a 7F BSOD', 'Just issuing a filter for affected hw', '2030-12-30T16:00:00')
+	VALUES(95232, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Manual errata: Bluetooth - L2CAP Performance (Reliability) test failure due to a 7F BSOD', 'Bluetooth - L2CAP Performance (Reliability) test failure due to a 7F BSOD', 'Just issuing a filter for affected hw', '2030-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -48948,6 +48948,9 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
 	VALUES(@FilterId, 2, 'boolean(//Devnode[contains(.,''USB\VID_8087&PID_0029'') or contains(.,''USB\VID_8087&PID_0A2B'') or contains(.,''ACPI\VEN_INT&DEV_33E4'') or contains(.,''iBTSerialBus\UART_H4'')])', @GathererTypeId)
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"RequirementID","MatchType":0,"Values":["Device.BusController.Bluetooth.Base.L2CapPerformance","System.Client.BluetoothController.Base.L2capPerformance"]}')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Co Full","Windows v10.0 Client x64 Ni Full"]}')
@@ -48963,9 +48966,6 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 	VALUES(@FilterId, 'Error', 'EndTest', 'ERROR:', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
-
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'Error', 'EndTest', 'ERROR:', 'UserText', 0, 0)
 
 	DELETE FROM @ParentNodes
 END
