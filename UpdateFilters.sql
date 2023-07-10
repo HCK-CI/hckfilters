@@ -53272,7 +53272,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-10-06T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 116972 v2.
+-- Inserting filter 116972 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -53287,11 +53287,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 116972 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 116972 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(116972, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[Erratum] Lullaby test loses synchronization with endpoints', 'Lullaby test loses synchronization when endpoints are not ready to stream right after returning from the target power state.', 'This filter overturns failures until the test can be revised.', '2024-01-30T16:00:00')
+	VALUES(116972, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[Erratum] Lullaby test loses synchronization with endpoints', 'Lullaby test loses synchronization when endpoints are not ready to stream right after returning from the target power state.', 'This filter overturns failures until the test can be revised.', '2024-01-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53299,7 +53299,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[contains(.,"AUCD\VEN_QCOM&DEV_0629")])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[contains(.,"AUCD\VEN_QCOM&DEV_0629") or contains(.,"AUCD\VEN_QCOM&DEV_0A29")])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
