@@ -2600,7 +2600,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-31T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 2657 v1.
+-- Inserting filter 2657 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -2615,11 +2615,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 2657 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 2657 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(2657, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'DQT-Devfund-PnPDTest-"Failed to open EDT device" error may be seen during PNP tests when testing some root enumerated devices', 'PNP tests need a test filter to be installed as an upper filter on the device stack. This isn''t allowed on some software device stacks. Our tests fail with "Failed to open EDT device" error message when testing these devices.
+	VALUES(2657, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'DQT-Devfund-PnPDTest-"Failed to open EDT device" error may be seen during PNP tests when testing some root enumerated devices', 'PNP tests need a test filter to be installed as an upper filter on the device stack. This isn''t allowed on some software device stacks. Our tests fail with "Failed to open EDT device" error message when testing these devices.
 Note: This was Errata 2715', 'This filter will be used to resolve the issue.', '2023-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
@@ -2628,7 +2628,7 @@ Note: This was Errata 2715', 'This filter will be used to resolve the issue.', '
 	VALUES(@FilterId, 1, 'boolean(//Devnode/Enumerator[.=''ROOT''])')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["8.100.9419"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["8.100.9419","8.100.9600"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -35599,7 +35599,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-07-31T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 61627 v21.
+-- Inserting filter 61627 v22.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -35614,11 +35614,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 61627 AND Version = 21
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 61627 AND Version = 22
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(61627, 21, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WGF11 Shader5x tests', 'Shader 5x LoadStore\store_uav_typed test uses too tight a precision tolerance.', 'Just issuing a filter for affected hw', '2030-03-31T00:00:00')
+	VALUES(61627, 22, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WGF11 Shader5x tests', 'Shader 5x LoadStore\store_uav_typed test uses too tight a precision tolerance.', 'Just issuing a filter for affected hw', '2030-03-31T00:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -35626,7 +35626,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(DISPLAY_BLOCK/Device/@HardwareID[contains(.,''PCI\VEN_1002'') and (contains(.,''DEV_731F'') or contains(.,''DEV_73A0'') or contains(.,''DEV_73A2'') or contains(.,''DEV_73A3'') or contains(.,''DEV_73A1'') or contains(.,''DEV_73AB'') or contains(.,''DEV_73AE'') or contains(.,''DEV_73BF'') or contains(.,''DEV_73C0'') or contains(.,''DEV_73C1'') or contains(.,''DEV_73DF'') or contains(.,''DEV_73C3'') or contains(.,''DEV_73FF'') or contains(.,''DEV_73E0'') or contains(.,''DEV_73E1'') or contains(.,''DEV_73E2'') or contains(.,''DEV_73E3'') or contains(.,''DEV_73AF'') or contains(.,''DEV_164D'') or contains(.,''DEV_164E'') or contains(.,''DEV_7420'') or contains(.,''DEV_7422'') or contains(.,''DEV_743F'') or contains(.,''DEV_73EF'') or contains(.,''DEV_1681'') or contains(.,''DEV_7424'') or contains(.,''DEV_73A5'') or contains(.,''DEV_1506'') or contains(.,''DEV_73F0'') or contains(.,''DEV_73C8'') or contains(.,''DEV_744C'')or contains(.,''DEV_7480'')or contains(.,''DEV_7481'')or contains(.,''DEV_7483'')or contains(.,''DEV_7489'')or contains(.,''DEV_748B'')or contains(.,''DEV_749F'')or contains(.,''DEV_15BF'')or contains(.,''DEV_15C8'')or contains(.,''DEV_7448'')or contains(.,''DEV_745E'') or contains(.,''DEV_747E''))])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(DISPLAY_BLOCK/Device/@HardwareID[contains(.,''PCI\VEN_1002'') and (contains(.,''DEV_731F'') or contains(.,''DEV_73A0'') or contains(.,''DEV_73A2'') or contains(.,''DEV_73A3'') or contains(.,''DEV_73A1'') or contains(.,''DEV_73AB'') or contains(.,''DEV_73AE'') or contains(.,''DEV_73BF'') or contains(.,''DEV_73C0'') or contains(.,''DEV_73C1'') or contains(.,''DEV_73DF'') or contains(.,''DEV_73C3'') or contains(.,''DEV_73FF'') or contains(.,''DEV_73E0'') or contains(.,''DEV_73E1'') or contains(.,''DEV_73E2'') or contains(.,''DEV_73E3'') or contains(.,''DEV_73AF'') or contains(.,''DEV_164D'') or contains(.,''DEV_164E'') or contains(.,''DEV_7420'') or contains(.,''DEV_7422'') or contains(.,''DEV_743F'') or contains(.,''DEV_73EF'') or contains(.,''DEV_1681'') or contains(.,''DEV_7424'') or contains(.,''DEV_73A5'') or contains(.,''DEV_1506'') or contains(.,''DEV_73F0'') or contains(.,''DEV_73C8'') or contains(.,''DEV_744C'')or contains(.,''DEV_7480'')or contains(.,''DEV_7481'')or contains(.,''DEV_7483'')or contains(.,''DEV_7489'')or contains(.,''DEV_748B'')or contains(.,''DEV_749F'')or contains(.,''DEV_15BF'')or contains(.,''DEV_15C8'')or contains(.,''DEV_7448'')or contains(.,''DEV_745E'') or contains(.,''DEV_747E'') or contains(.,''DEV_1901''))])', @GathererTypeId)
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -44242,7 +44242,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 83939 v6.
+-- Inserting filter 83939 v7.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -44257,16 +44257,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 83939 AND Version = 6
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 83939 AND Version = 7
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(83939, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata- Verify run from driver store support and file versioning (Graphics Drivers) test fails driver version is 30. (WDDM 3.0 for Cobalt) (Device Specific)', 'HLK Errata- Verify run from driver store support and file versioning (Graphics Drivers) test fails driver version is 30. (WDDM 3.0 for Cobalt)', 'This is an acceptable failure', '2023-12-30T16:00:00')
+	VALUES(83939, 7, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata- Verify run from driver store support and file versioning (Graphics Drivers) test fails driver version is 30. (WDDM 3.0 for Cobalt) (Device Specific)', 'HLK Errata- Verify run from driver store support and file versioning (Graphics Drivers) test fails driver version is 30. (WDDM 3.0 for Cobalt)', 'This is an acceptable failure', '2023-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_10DE'') or contains(.,''PCI\VEN_1002'')])')
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_10DE'') or contains(.,''PCI\VEN_1002'') or contains(.,''PCI\VEN_8086'')])')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.19041"]}')
