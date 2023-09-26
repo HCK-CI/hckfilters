@@ -49365,6 +49365,44 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-08-31T01:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 98442 v3.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%kspostst%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%kspostst%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 98442 AND Version = 3
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(98442, 3, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'KS Position test issues on Qualcomm drivers', 'We have seen some issues with Qualcomm audio drivers and KS Position test, but they require further investigation.', 'The issues are considered to be of low impact to the end user, so this filter will waive them until further investigation is done.', '2024-03-29T00:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[starts-with(.,"AUCD\VEN_QCOM&DEV_0629&SUBSYS_QRD08280\5&391FA70F&0&0") or starts-with(.,"AUCD\VEN_QCOM&DEV_0629&SUBSYS_QRD08280\5&2B2938CB&0&0") or starts-with(.,"AUCD\VEN_QCOM&DEV_0C29")])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'WDMAudio::KsPosTest::TAEF_DriftAndJitter#.*', 'Title', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-03-29T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 98458 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
