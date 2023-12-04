@@ -923,7 +923,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 484 v5.
+-- Inserting filter 484 v7.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -938,20 +938,23 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 484 AND Version = 5
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 484 AND Version = 7
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(484, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Offload Reset Logo  test fails in RRTI List ID and WUT-with-Unmap unit tests', 'Filter to mask below failures:
+	VALUES(484, 7, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Offload Reset Logo  test fails in RRTI List ID and WUT-with-Unmap unit tests', 'Filter to mask below failures:
 (a) RRTI Invalid list identifier test
 (b) Write Using Token Modify Source Token area before data transfer by trimming source area
 (c) Write Using Token Modify Source Token area during data transfer by trimming source area
 
 (a) and (c) are not really applicable.
-(b) sends UNMAP without regards to Maximum Unmap LBA count which causes the error.', 'The issue is investigated and corrected. It will be available in future releases.', '2024-01-30T16:00:00')
+(b) sends UNMAP without regards to Maximum Unmap LBA count which causes the error.', 'The issue is investigated and corrected. It will be available in future releases.', '2029-01-09T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows 8 Server x64","Windows v6.3 Server x64","Windows v10.0 Server x64 RS1 Full","Windows v10.0 Server x64 RS5 Full","Windows v10.0 Server x64 Fe Full"]}')
+
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
 	VALUES(@FilterId, 'StartTest', 'EndTest:Title=Write Using Token Exceed ODX limit test', 'Write Using Token Exceed ODX limit test', 'Title', 0, 0)
@@ -1044,7 +1047,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-01-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-01-09T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 471 v3.
 SET @TestCommandLineId = NULL
@@ -1325,6 +1328,110 @@ Try updgrading BIOS on the test system, or try running the tests on different te
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 204 v6.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'scsicompliance.exe'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('scsicompliance.exe')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 204 AND Version = 6
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(204, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Offload SCSI Compliance test fails in RRTI List ID and WUT-with-Unmap unit tests', 'Filter to mask below failures:
+(a) RRTI Invalid list identifier test
+(b) Write Using Token Modify Source Token area before data transfer by trimming source area
+(c) Write Using Token Modify Source Token area during data transfer by trimming source area
+
+(a) and (c) are not really applicable.
+(b) sends UNMAP without regards to Maximum Unmap LBA count which causes the error.', 'The issue is investigated and corrected. It will be available in future releases.', '2029-01-10T00:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows 8 Server x64","Windows v6.3 Server x64","Windows v10.0 Server x64 RS1 Full","Windows v10.0 Server x64 RS5 Full","Windows v10.0 Server x64 Fe Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=Write Using Token Modify Source Token area before data transfer by writing to source area', 'Write Using Token Modify Source Token area before data transfer by writing to source area', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Logging an error', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title', 'Assertion: Write Using Token Modify Source Token area before data transfer by trimming source area', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Logging an error', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title', 'Assertion: Write Using Token Modify Source Token area during data transfer by trimming source area', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Logging an error', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title', 'ASSERTION: Receive Token Invalid list identifier test', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Logging an error', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=Write Using Token Modify Source Token area before data transfer by another WUT command to source area', 'Write Using Token Modify Source Token area before data transfer by another WUT command to source area', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Logging an error', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=Write Using Token with more LBAs than availabe in ROD', 'Write Using Token with more LBAs than availabe in ROD', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Logging an error', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-01-10T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 195 v6.
 SET @TestCommandLineId = NULL
@@ -1970,50 +2077,6 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-08-31T00:00:00' WHERE Id = @FilterId AND [Status] = 0
-
--- Inserting filter 2949 v3.
-SET @TestCommandLineId = NULL
-SET @FilterId = NULL
-SET @GathererTypeId = NULL
-SET @ParentLogNodeId = NULL
-
--- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '[[]WTTRunWorkingDir]\ndistest\bin\ndtest.exe /auto /client /dvi /u /target:Miniport /tc:[[]queryTestDeviceID] /script:{[[]TestScript]}%'
-IF @TestCommandLineId IS NULL
-BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('[[]WTTRunWorkingDir]\ndistest\bin\ndtest.exe /auto /client /dvi /u /target:Miniport /tc:[[]queryTestDeviceID] /script:{[[]TestScript]}%')
-	SELECT @TestCommandLineId = SCOPE_IDENTITY()
-END
-
--- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 2949 AND Version = 3
-IF @FilterId IS NULL
-BEGIN
-	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(2949, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Miniport must support at least 8 RSS Queues (reported in NumberOfReceiveQueues.)', 'Under HCK 2.1 the test is incorrectly requiring that Server 2008 NICs of 1 and 10Gb parts support a Server 2012 requirement for a greater number of RSS Queues.
-The failing test is "NDISTest 6.0 - [1 Machine] - 1c_Mini6RSSOids". The failure is that the device reports fewer RSS Queues than required by Windows Blue.', 'Issue Eratta to Server 2008RN NICs of 1Gb and 10Gb parts for HCK 2.1.', '2023-11-30T16:00:00')
-	SELECT @FilterId = SCOPE_IDENTITY()
-
--- Inserting filter constraints
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["8.100.9600","10.1.17763"]}')
-
--- Inserting filter log nodes
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', '!EndTest', 'Verifying OID_GEN_RECEIVE_SCALE_CAPABILITIES response', 'Title', 0, 0)
-
-	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
-
-	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', '!Error', 'Miniport must support at least [2-8] .* Actual reported value [1-4]', 'UserText', 0, 0, @ParentLogNodeId)
-
-	DELETE FROM @ParentNodes WHERE Depth >= 1
-
-	DELETE FROM @ParentNodes
-END
-ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-11-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 2933 v2.
 SET @TestCommandLineId = NULL
@@ -5416,52 +5479,6 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-07-01T01:00:00' WHERE Id = @FilterId AND [Status] = 0
-
--- Inserting filter 5531 v4.
-SET @TestCommandLineId = NULL
-SET @FilterId = NULL
-SET @GathererTypeId = NULL
-SET @ParentLogNodeId = NULL
-
--- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%ndtest.exe /auto /client /dvi /u /target:Miniport%'
-IF @TestCommandLineId IS NULL
-BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('%ndtest.exe /auto /client /dvi /u /target:Miniport%')
-	SELECT @TestCommandLineId = SCOPE_IDENTITY()
-END
-
--- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5531 AND Version = 4
-IF @FilterId IS NULL
-BEGIN
-	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(5531, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'ERRATA: NDISTest 6.0 - [1 Machine] - 1c_Mini6RSSOids test requirement of 8 RSS queue default is not needed in some scenarios where the port/queue count exceeds core count', 'Due to an issue in the OS queue management, it may not be optimal for the default *NumRssQueues to be 8. As a workaround, it is acceptable in verified configurations / devices to lower the default to 2 or more. This is a device-specific erratum.', 'Please open a support case with Microsoft HCK support if you are encountering this issue, and have reason for a lower default RSS queue count.', '2023-11-30T16:00:00')
-	SELECT @FilterId = SCOPE_IDENTITY()
-
--- Inserting filter constraints
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//NetworkAdapter/linkspeed[.=(''1410065408'') or contains(.,''10000000000'')])')
-
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v6.3 Client x86","Windows v6.3 Client x64","Windows v6.3 Server x64","Windows 8 Client x86","Windows 8 Client x64","Windows 8 Server x64","Windows v10.0 Server x64 RS5 Full","Windows v10.0 Server ARM64 RS5 Full"]}')
-
--- Inserting filter log nodes
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest', 'Verifying OID_GEN_RECEIVE_SCALE_CAPABILITIES response', 'Title', 0, 0)
-
-	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
-
-	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', '!Error', 'Miniport must support at least 8 RSS Queues.*Actual reported value (2|3|4|5|6|7)', 'UserText', 0, 0, @ParentLogNodeId)
-
-	DELETE FROM @ParentNodes WHERE Depth >= 1
-
-	DELETE FROM @ParentNodes
-END
-ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-11-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 5520 v5.
 SET @TestCommandLineId = NULL
@@ -39657,7 +39674,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 75598 v4.
+-- Inserting filter 75598 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -39672,11 +39689,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 75598 AND Version = 4
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 75598 AND Version = 5
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(75598, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[OS Errata] AMD devices are failing HAP test due to the OS not having the required resource management', 'AMD devices fail HAP test due to resource management issues.', 'This errata overturns the failures.', '2025-10-13T17:00:00')
+	VALUES(75598, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[OS Errata] AMD devices are failing HAP test due to the OS not having the required resource management', 'AMD devices fail HAP test due to resource management issues.', 'This errata overturns the failures.', '2025-10-13T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -39702,7 +39719,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DRIVERS_BLOCK')
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest', 'CHapTest::VolumeImmediate#.*', 'Title', 0, 0)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'CHapTest(|NoDV)::VolumeImmediate#.*', 'Title', 0, 0)
 
 	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
 
@@ -39713,7 +39730,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DRIVERS_BLOCK')
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest', 'CHapTest::Mix#.*', 'Title', 0, 0)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'CHapTest(|NoDV)::Mix#.*', 'Title', 0, 0)
 
 	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
 
@@ -39735,7 +39752,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DRIVERS_BLOCK')
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest', 'CHapTest::MixOffloadDifferentFormat#.*', 'Title', 0, 0)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'CHapTest(|NoDV)::MixOffloadDifferentFormat#.*', 'Title', 0, 0)
 
 	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
 
@@ -39969,6 +39986,101 @@ BEGIN
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-01-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 75906 v3.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging% win6_4.mbn.gsm.test5gextensions.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging% win6_4.mbn.gsm.test5gextensions.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 75906 AND Version = 3
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(75906, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Win6_4.MB.GSM.Data.Test5GExtensions failing with error "Attempt to find provisioned context of WwanContextTypeInternet failed"', 'HLK Errata: Win6_4.MB.GSM.Data.Test5GExtensions failing with error "Attempt to find provisioned context of WwanContextTypeInternet failed"', 'This is an acceptable failure', '2025-10-13T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode[contains(.,''PCI\VEN_14C3&DEV_4D75'') or contains(.,''PCI\VEN_17CB&DEV_0306'')])', @GathererTypeId)
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.19041"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Win6_3MBN::Test5GExtensions::Verify5G_NSAExtensions', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'Attempt to find provisioned context of WwanContextTypeInternet failed', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Win6_3MBN::Test5GExtensions::Verify5G_NSAExtensions', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'Attempt to find provisioned context of WwanContextTypeInternet failed', 'UserText', 0, 0, @ParentLogNodeId)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 2
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'Attempt to connect using provisioned context failed', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 2
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Win6_3MBN::Test5GExtensions::Verify5G_NSAExtensions', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'Attempt to find provisioned context of WwanContextTypeInternet failed', 'UserText', 0, 0, @ParentLogNodeId)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 2
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'Attempt to connect using provisioned context failed', 'UserText', 0, 0, @ParentLogNodeId)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 3
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 3
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'Failed to connect', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 3
+
+	DELETE FROM @ParentNodes WHERE Depth >= 2
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-13T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 76265 v5.
 SET @TestCommandLineId = NULL
@@ -49866,54 +49978,6 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-04-21T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 101036 v4.
-SET @TestCommandLineId = NULL
-SET @FilterId = NULL
-SET @GathererTypeId = NULL
-SET @ParentLogNodeId = NULL
-
--- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging win6_4.mbn.gsm.testbasestationsinfo.dll'
-IF @TestCommandLineId IS NULL
-BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging win6_4.mbn.gsm.testbasestationsinfo.dll')
-	SELECT @TestCommandLineId = SCOPE_IDENTITY()
-END
-
--- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 101036 AND Version = 4
-IF @FilterId IS NULL
-BEGIN
-	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(101036, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Win6_3MBN::TestBaseStationInfo is failing due to serving cell size mismatch (create for Win10 only)', 'Win6_4.MB.GSM.Data.TestBaseStationsInfo is failing with following errors:
-• LTE - LTEServingCellSize is NOT valid, expected 0x2e
-', 'This issue described is an acceptable failure.', '2023-12-30T16:00:00')
-	SELECT @FilterId = SCOPE_IDENTITY()
-
--- Inserting filter constraints
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_14C3&DEV_4D75'') or contains(.,''QCMBBNETADAPTER'') or contains(.,''USB\VID_0489&PID_E107'') or contains(.,''USB\VID_0489&PID_E0DA'')])')
-
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x86 Vb Full","Windows v10.0 Client x64 Vb Full"]}')
-
--- Inserting filter log nodes
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest', 'Win6_3MBN::TestBaseStationsInfo::GetBaseStationsInfo', 'Title', 0, 0)
-
-	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
-
-	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', 'EndTest', 'LTEServingCellSize is NOT valid, expected 0x2e', 'UserText', 0, 0, @ParentLogNodeId)
-
-	DELETE FROM @ParentNodes WHERE Depth >= 1
-
-	DELETE FROM @ParentNodes
-END
-ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
-
 -- Inserting filter 101038 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -54758,7 +54822,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-07-31T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 135826 v1.
+-- Inserting filter 135826 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -54773,11 +54837,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 135826 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 135826 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(135826, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'MEP Enabled Cameras using 1.0.14 do not skip unsupported extended prop tests', 'MEP 1.0.14 will incorrectly filter profiles for devices with MSOS Descriptor profile. In this case, a camera with only YUY2 mediatypes is filtered to mediatypes with only NV12. This causes stream creation to fail, as there are no mediatypes. This then causes us to fail, and not skip extended prop tests.', 'MEP issued fixed in 1.0.15. Errata issued', '2023-11-30T16:00:00')
+	VALUES(135826, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'MEP Enabled Cameras using 1.0.14 do not skip unsupported extended prop tests', 'MEP 1.0.14 will incorrectly filter profiles for devices with MSOS Descriptor profile. In this case, a camera with only YUY2 mediatypes is filtered to mediatypes with only NV12. This causes stream creation to fail, as there are no mediatypes. This then causes us to fail, and not skip extended prop tests.', 'MEP issued fixed in 1.0.15. Errata issued', '2024-06-29T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -54788,7 +54852,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2023-11-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 135828 v1.
 SET @TestCommandLineId = NULL
@@ -56186,6 +56250,47 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-11-06T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 149136 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash usbhlk.tests.dll /name:USB::USBHLKTests::USB3Insertion'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash usbhlk.tests.dll /name:USB::USBHLKTests::USB3Insertion')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 149136 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(149136, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: USB 3.0 Insertion Test is failing on USB2 only devices', 'USB 3.0 Insertion Test is unexpectedly targeting USB2-only devices', 'The issue described is an acceptable failure.', '2026-01-10T08:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DRIVERS_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DRIVERS_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DRIVERS_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Driver[FileName[@WDK=''WDKDriver_FileName'' and text()=''ntoskrnl.exe''] and number(substring-after(VersionBinary, ''10.0.22621.''))>=2361])', @GathererTypeId)
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', '!Msg', '.*', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-01-10T08:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 149639 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -56258,6 +56363,57 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 151067 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'te.exe E2EBdeWlkTest.dll %'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('te.exe E2EBdeWlkTest.dll %')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 151067 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(151067, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Decrypt volume is failing in BitLocker Tpm+PIN+USB and Recovery Password Test ', 'Decrypt the volume and wait until decryption completes failing BitLocker Tpm+PIN+USB and Recovery Password Test.', 'This is an acceptable failure', '2025-11-10T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'WlkTest_DecryptOSVolume::I_DecryptOSVolume', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'Initializing device encryption', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'Verifying if the volume is initialized', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!Msg', 'Adding the clear key protector ', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-11-10T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 
 -- Deprecating filter 6994 v1.
