@@ -6283,26 +6283,26 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 5229 v5.
+-- Inserting filter 5229 v6.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
 SET @ParentLogNodeId = NULL
 
 -- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'DXGIGammaVM.exe [[]MODIFIEDCMDLINE]'
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'configdisplay.exe -d2%'
 IF @TestCommandLineId IS NULL
 BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('DXGIGammaVM.exe [[]MODIFIEDCMDLINE]')
+	INSERT INTO TestCommandLine(CommandLine) VALUES('configdisplay.exe -d2%')
 	SELECT @TestCommandLineId = SCOPE_IDENTITY()
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5229 AND Version = 5
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5229 AND Version = 6
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(5229, 5, 1, 1, 1, 1, 1, 0, @TestCommandLineId, 'HCK Errata: DXGI Gamma Ramps failure due to access violation', 'DXGI Gamma Ramps failure due to access violation', 'This is an acceptable failure', '2025-08-31T00:00:00')
+	VALUES(5229, 6, 1, 1, 1, 1, 1, 1, @TestCommandLineId, 'HCK Errata: DXGI Gamma Ramps failure due to access violation', 'DXGI Gamma Ramps failure due to access violation', 'This is an acceptable failure', '2025-08-31T00:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -13784,7 +13784,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 20086 v59.
+-- Inserting filter 20086 v60.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -13799,11 +13799,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 20086 AND Version = 59
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 20086 AND Version = 60
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(20086, 59, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'TPM EK Certificate Tests Verify Known Authority', 'EK Certificates needs to have an authority that Microsoft is aware of.', 'Make Microsoft aware of the authority identifier', '2030-07-01T07:00:00')
+	VALUES(20086, 60, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'TPM EK Certificate Tests Verify Known Authority', 'EK Certificates needs to have an authority that Microsoft is aware of.', 'Make Microsoft aware of the authority identifier', '2030-07-01T07:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -15200,6 +15200,54 @@ BEGIN
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
 	VALUES(@FilterId, 'Error', '!', '99 23 9c 69 61 b6 e8 e2 82 a1 87 95 7f d5 38 f0 c5 d3 af 31', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '56 3b 0e dc 79 03 3b 09 df 74 4a 43 5e 84 fc 56 e3 56 5e 04', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '78 73 29 31 7e 43 b2 3d e9 96 27 fd b8 04 ce d8 a5 f7 40 90', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '5c b6 ff 99 90 01 06 7c ab f7 a3 0c 92 d1 9e bc f1 ba 96 f3', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'e5 72 bd 65 97 b5 e8 c8 e5 fb bf 38 d1 bf 5a f1 11 88 80 84', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'b7 dc 7e 4d 4f 82 39 e5 22 cc 81 60 3e 49 87 8b 2b 12 6e 32', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '15 b1 8c 1f 2b 19 20 4f 8a 4e b8 fb 95 1e f6 7a 41 f3 e7 24', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '4e c4 84 a6 cc 64 39 f0 e6 39 14 a5 35 55 72 3d b1 e5 3e ab', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'e5 19 0b 0b d3 22 39 a3 22 d2 b6 b7 9e c1 c3 4f 5d 50 ce 17', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '1b 3b e5 e5 3b 3f e8 65 f9 1e 14 54 2a 73 27 88 8e 0b f3 d5', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '6a 07 23 43 06 af 60 46 84 81 db e2 3c 4b a2 55 19 68 69 d9', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '4b 6c c7 a0 7e 81 c0 5f 97 a4 ec 3a 59 14 e5 bd 43 52 8e ad', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '87 6e 8c c3 2f 60 36 a7 c5 2e 02 dd 26 32 e6 b4 16 36 3a 38', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
@@ -19511,7 +19559,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 27222 v6.
+-- Inserting filter 27222 v7.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -19526,11 +19574,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 27222 AND Version = 6
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 27222 AND Version = 7
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(27222, 6, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'WDDM2.2 Periodic frame notification feature is enforced when there are scenarios that are optional', 'Periodic frame notificaiton feature was added in wddm 2.2. This feature is not required of hardware. ', 'Future release of the kit will adjust the test to account for this. ', '2050-12-30T16:00:00')
+	VALUES(27222, 7, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'WDDM2.2 Periodic frame notification feature is enforced when there are scenarios that are optional', 'Periodic frame notificaiton feature was added in wddm 2.2. This feature is not required of hardware. ', 'Future release of the kit will adjust the test to account for this. ', '2050-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -19538,7 +19586,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(DISPLAY_BLOCK/Device/@HardwareID[(contains(.,''PCI\VEN_10DE'') or contains(.,''PCI\VEN_1002'')) and (false or contains(.,''DEV_06C0'') or contains(.,''DEV_06C1'') or contains(.,''DEV_06C2'') or contains(.,''DEV_06C3'') or contains(.,''DEV_06C4'') or contains(.,''DEV_06C5'') or contains(.,''DEV_06C6'') or contains(.,''DEV_06C7'') or contains(.,''DEV_06C8'') or contains(.,''DEV_06C9'') or contains(.,''DEV_06CA'') or contains(.,''DEV_06CB'') or contains(.,''DEV_06CD'') or contains(.,''DEV_06D1'') or contains(.,''DEV_06D2'') or contains(.,''DEV_06DA'') or contains(.,''DEV_06DE'') or contains(.,''DEV_06DF'') or contains(.,''DEV_0DC0'') or contains(.,''DEV_0DC1'') or contains(.,''DEV_0DC2'') or contains(.,''DEV_0DC4'') or contains(.,''DEV_0DC5'') or contains(.,''DEV_0DC6'') or contains(.,''DEV_0DCA'') or contains(.,''DEV_0DCC'') or contains(.,''DEV_0DCD'') or contains(.,''DEV_0DCE'') or contains(.,''DEV_0DCF'') or contains(.,''DEV_0DD0'') or contains(.,''DEV_0DD1'') or contains(.,''DEV_0DD2'') or contains(.,''DEV_0DD3'') or contains(.,''DEV_0DD6'') or contains(.,''DEV_0DDA'') or contains(.,''DEV_0DDE'') or contains(.,''DEV_0DDF'') or contains(.,''DEV_0DE0'') or contains(.,''DEV_0DE1'') or contains(.,''DEV_0DE2'') or contains(.,''DEV_0DE3'') or contains(.,''DEV_0DE4'') or contains(.,''DEV_0DE5'') or contains(.,''DEV_0DE6'') or contains(.,''DEV_0DE7'') or contains(.,''DEV_0DE8'') or contains(.,''DEV_0DE9'') or contains(.,''DEV_0DEA'') or contains(.,''DEV_0DEB'') or contains(.,''DEV_0DEC'') or contains(.,''DEV_0DED'') or contains(.,''DEV_0DEE'') or contains(.,''DEV_0DEF'') or contains(.,''DEV_0DF0'') or contains(.,''DEV_0DF1'') or contains(.,''DEV_0DF2'') or contains(.,''DEV_0DF3'') or contains(.,''DEV_0DF4'') or contains(.,''DEV_0DF5'') or contains(.,''DEV_0DF6'') or contains(.,''DEV_0DF7'') or contains(.,''DEV_0DFC'') or contains(.,''DEV_0DFE'') or contains(.,''DEV_0DFF'') or contains(.,''DEV_0E21'') or contains(.,''DEV_0E22'') or contains(.,''DEV_0E23'') or contains(.,''DEV_0E24'') or contains(.,''DEV_0E25'') or contains(.,''DEV_0E28'') or contains(.,''DEV_0E30'') or contains(.,''DEV_0E31'') or contains(.,''DEV_0E32'') or contains(.,''DEV_0E38'') or contains(.,''DEV_0E3C'') or contains(.,''DEV_0E3E'') or contains(.,''DEV_0E3F'') or contains(.,''DEV_0F00'') or contains(.,''DEV_0F01'') or contains(.,''DEV_0F02'') or contains(.,''DEV_0F03'') or contains(.,''DEV_0FC0'') or contains(.,''DEV_0FC1'') or contains(.,''DEV_0FC2'') or contains(.,''DEV_0FC4'') or contains(.,''DEV_0FC5'') or contains(.,''DEV_0FC6'') or contains(.,''DEV_0FC8'') or contains(.,''DEV_0FC9'') or contains(.,''DEV_0FCB'') or contains(.,''DEV_0FCC'') or contains(.,''DEV_0FCE'') or contains(.,''DEV_0FCF'') or contains(.,''DEV_0FD0'') or contains(.,''DEV_0FD1'') or contains(.,''DEV_0FD2'') or contains(.,''DEV_0FD3'') or contains(.,''DEV_0FD4'') or contains(.,''DEV_0FD5'') or contains(.,''DEV_0FD8'') or contains(.,''DEV_0FD9'') or contains(.,''DEV_0FDA'') or contains(.,''DEV_0FDB'') or contains(.,''DEV_0FDC'') or contains(.,''DEV_0FDF'') or contains(.,''DEV_0FE0'') or contains(.,''DEV_0FE1'') or contains(.,''DEV_0FE2'') or contains(.,''DEV_0FE3'') or contains(.,''DEV_0FE4'') or contains(.,''DEV_0FE5'') or contains(.,''DEV_0FE6'') or contains(.,''DEV_0FE7'') or contains(.,''DEV_0FE8'') or contains(.,''DEV_0FE9'') or contains(.,''DEV_0FEA'') or contains(.,''DEV_0FEC'') or contains(.,''DEV_0FED'') or contains(.,''DEV_0FEE'') or contains(.,''DEV_0FF0'') or contains(.,''DEV_0FF1'') or contains(.,''DEV_0FF3'') or contains(.,''DEV_0FF5'') or contains(.,''DEV_0FF6'') or contains(.,''DEV_0FF7'') or contains(.,''DEV_0FF8'') or contains(.,''DEV_0FF9'') or contains(.,''DEV_0FFA'') or contains(.,''DEV_0FFB'') or contains(.,''DEV_0FFC'') or contains(.,''DEV_0FFD'') or contains(.,''DEV_0FFE'') or contains(.,''DEV_0FFF'') or contains(.,''DEV_1001'') or contains(.,''DEV_1003'') or contains(.,''DEV_1004'') or contains(.,''DEV_1005'') or contains(.,''DEV_1007'') or contains(.,''DEV_1008'') or contains(.,''DEV_100A'') or contains(.,''DEV_100B'') or contains(.,''DEV_100C'') or contains(.,''DEV_101E'') or contains(.,''DEV_101F'') or contains(.,''DEV_1020'') or contains(.,''DEV_1021'') or contains(.,''DEV_1022'') or contains(.,''DEV_1023'') or contains(.,''DEV_1024'') or contains(.,''DEV_1026'') or contains(.,''DEV_1027'') or contains(.,''DEV_1028'') or contains(.,''DEV_1029'') or contains(.,''DEV_102A'') or contains(.,''DEV_102B'') or contains(.,''DEV_103A'') or contains(.,''DEV_103B'') or contains(.,''DEV_103C'') or contains(.,''DEV_1040'') or contains(.,''DEV_1041'') or contains(.,''DEV_1042'') or contains(.,''DEV_1048'') or contains(.,''DEV_1049'') or contains(.,''DEV_104A'') or contains(.,''DEV_104B'') or contains(.,''DEV_104C'') or contains(.,''DEV_104D'') or contains(.,''DEV_1050'') or contains(.,''DEV_1051'') or contains(.,''DEV_1052'') or contains(.,''DEV_1054'') or contains(.,''DEV_1055'') or contains(.,''DEV_1056'') or contains(.,''DEV_1057'') or contains(.,''DEV_1058'') or contains(.,''DEV_1059'') or contains(.,''DEV_105A'') or contains(.,''DEV_105B'') or contains(.,''DEV_107C'') or contains(.,''DEV_107D'') or contains(.,''DEV_107E'') or contains(.,''DEV_107F'') or contains(.,''DEV_1080'') or contains(.,''DEV_1081'') or contains(.,''DEV_1082'') or contains(.,''DEV_1084'') or contains(.,''DEV_1086'') or contains(.,''DEV_1087'') or contains(.,''DEV_1088'') or contains(.,''DEV_1089'') or contains(.,''DEV_108B'') or contains(.,''DEV_108C'') or contains(.,''DEV_108E'') or contains(.,''DEV_1091'') or contains(.,''DEV_1094'') or contains(.,''DEV_1096'') or contains(.,''DEV_1098'') or contains(.,''DEV_1140'') or contains(.,''DEV_1144'') or contains(.,''DEV_1147'') or contains(.,''DEV_1149'') or contains(.,''DEV_114A'') or contains(.,''DEV_114B'') or contains(.,''DEV_1180'') or contains(.,''DEV_1182'') or contains(.,''DEV_1183'') or contains(.,''DEV_1184'') or contains(.,''DEV_1185'') or contains(.,''DEV_1187'') or contains(.,''DEV_1188'') or contains(.,''DEV_1189'') or contains(.,''DEV_118A'') or contains(.,''DEV_118B'') or contains(.,''DEV_118C'') or contains(.,''DEV_118D'') or contains(.,''DEV_118E'') or contains(.,''DEV_118F'') or contains(.,''DEV_1191'') or contains(.,''DEV_1192'') or contains(.,''DEV_1193'') or contains(.,''DEV_1194'') or contains(.,''DEV_1195'') or contains(.,''DEV_1198'') or contains(.,''DEV_1199'') or contains(.,''DEV_119D'') or contains(.,''DEV_119E'') or contains(.,''DEV_119F'') or contains(.,''DEV_11A0'') or contains(.,''DEV_11A1'') or contains(.,''DEV_11A2'') or contains(.,''DEV_11A3'') or contains(.,''DEV_11A4'') or contains(.,''DEV_11A5'') or contains(.,''DEV_11A7'') or contains(.,''DEV_11AA'') or contains(.,''DEV_11AC'') or contains(.,''DEV_11B1'') or contains(.,''DEV_11B4'') or contains(.,''DEV_11B6'') or contains(.,''DEV_11B7'') or contains(.,''DEV_11B8'') or contains(.,''DEV_11BA'') or contains(.,''DEV_11BB'') or contains(.,''DEV_11BC'') or contains(.,''DEV_11BD'') or contains(.,''DEV_11BE'') or contains(.,''DEV_11C0'') or contains(.,''DEV_11C1'') or contains(.,''DEV_11C2'') or contains(.,''DEV_11C3'') or contains(.,''DEV_11C4'') or contains(.,''DEV_11C5'') or contains(.,''DEV_11C6'')  or contains(.,''DEV_11C7'') or contains(.,''DEV_11C8'') or contains(.,''DEV_11CB'') or contains(.,''DEV_11D0'') or contains(.,''DEV_11D1'') or contains(.,''DEV_11D2'') or contains(.,''DEV_11D3'') or contains(.,''DEV_11E0'') or contains(.,''DEV_11E1'') or contains(.,''DEV_11E2'') or contains(.,''DEV_11E3'') or contains(.,''DEV_11FA'') or contains(.,''DEV_11FC'') or contains(.,''DEV_11FF'') or contains(.,''DEV_1200'') or contains(.,''DEV_1201'') or contains(.,''DEV_1202'') or contains(.,''DEV_1203'') or contains(.,''DEV_1205'') or contains(.,''DEV_1206'') or contains(.,''DEV_1207'') or contains(.,''DEV_1208'') or contains(.,''DEV_1210'') or contains(.,''DEV_1211'') or contains(.,''DEV_1212'') or contains(.,''DEV_1213'') or contains(.,''DEV_121F'') or contains(.,''DEV_1240'') or contains(.,''DEV_1241'') or contains(.,''DEV_1243'') or contains(.,''DEV_1244'') or contains(.,''DEV_1245'') or contains(.,''DEV_1246'') or contains(.,''DEV_1247'') or contains(.,''DEV_1248'') or contains(.,''DEV_1249'') or contains(.,''DEV_124B'') or contains(.,''DEV_124D'') or contains(.,''DEV_1250'') or contains(.,''DEV_1251'') or contains(.,''DEV_6780'') or contains(.,''DEV_6784'') or contains(.,''DEV_6788'') or contains(.,''DEV_678A'') or contains(.,''DEV_6790'') or contains(.,''DEV_6791'') or contains(.,''DEV_6792'') or contains(.,''DEV_6798'') or contains(.,''DEV_6799'') or contains(.,''DEV_679A'') or contains(.,''DEV_679B'') or contains(.,''DEV_679E'') or contains(.,''DEV_679F'') or contains(.,''DEV_6808'') or contains(.,''DEV_6809'') or contains(.,''DEV_6810'') or contains(.,''DEV_6811'') or contains(.,''DEV_6816'') or contains(.,''DEV_6817'') or contains(.,''DEV_6818'') or contains(.,''DEV_6819'') or contains(.,''DEV_684C'') or contains(.,''DEV_6800'') or contains(.,''DEV_6801'') or contains(.,''DEV_6802'') or contains(.,''DEV_6806'') or contains(.,''DEV_6828'') or contains(.,''DEV_6829'') or contains(.,''DEV_682C'') or contains(.,''DEV_6830'') or contains(.,''DEV_6831'') or contains(.,''DEV_6835'') or contains(.,''DEV_6837'') or contains(.,''DEV_6838'') or contains(.,''DEV_6839'') or contains(.,''DEV_683B'') or contains(.,''DEV_683D'') or contains(.,''DEV_683F'') or contains(.,''DEV_6820'') or contains(.,''DEV_6821'') or contains(.,''DEV_6822'') or contains(.,''DEV_6823'') or contains(.,''DEV_6824'') or contains(.,''DEV_6825'') or contains(.,''DEV_6826'') or contains(.,''DEV_6827'') or contains(.,''DEV_682A'') or contains(.,''DEV_682B'') or contains(.,''DEV_682D'') or contains(.,''DEV_682F'') or contains(.,''DEV_6608'') or contains(.,''DEV_6610'') or contains(.,''DEV_6611'') or contains(.,''DEV_6613'') or contains(.,''DEV_6617'') or contains(.,''DEV_6631'') or contains(.,''DEV_6600'') or contains(.,''DEV_6601'') or contains(.,''DEV_6602'') or contains(.,''DEV_6603'') or contains(.,''DEV_6604'') or contains(.,''DEV_6605'') or contains(.,''DEV_6606'') or contains(.,''DEV_6607'') or contains(.,''DEV_6620'') or contains(.,''DEV_6621'') or contains(.,''DEV_6623'') or contains(.,''DEV_6660'') or contains(.,''DEV_6663'') or contains(.,''DEV_6664'') or contains(.,''DEV_6665'') or contains(.,''DEV_6667'') or contains(.,''DEV_666F'') or contains(.,''DEV_73A1'') or contains(.,''DEV_73AE'') or contains(.,''DEV_9900'') or contains(.,''DEV_9901'') or contains(.,''DEV_9903'') or contains(.,''DEV_9904'') or contains(.,''DEV_9905'') or contains(.,''DEV_9906'') or contains(.,''DEV_9907'') or contains(.,''DEV_9908'') or contains(.,''DEV_9909'') or contains(.,''DEV_990A'') or contains(.,''DEV_990B'') or contains(.,''DEV_990C'') or contains(.,''DEV_990D'') or contains(.,''DEV_990E'') or contains(.,''DEV_990F'') or contains(.,''DEV_9910'') or contains(.,''DEV_9913'') or contains(.,''DEV_9917'') or contains(.,''DEV_9918'') or contains(.,''DEV_9919'') or contains(.,''DEV_9990'') or contains(.,''DEV_9991'') or contains(.,''DEV_9992'') or contains(.,''DEV_9993'') or contains(.,''DEV_9994'') or contains(.,''DEV_9995'') or contains(.,''DEV_9996'') or contains(.,''DEV_9997'') or contains(.,''DEV_9998'') or contains(.,''DEV_9999'') or contains(.,''DEV_999A'') or contains(.,''DEV_999B'') or contains(.,''DEV_999C'') or contains(.,''DEV_999D'') or contains(.,''DEV_99A0'') or contains(.,''DEV_99A2'') or contains(.,''DEV_99A4'') or contains(.,''DEV_990F''))])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(DISPLAY_BLOCK/Device/@HardwareID[(contains(.,''PCI\VEN_10DE'') or contains(.,''PCI\VEN_1002'')) and (false or contains(.,''DEV_06C0'') or contains(.,''DEV_06C1'') or contains(.,''DEV_06C2'') or contains(.,''DEV_06C3'') or contains(.,''DEV_06C4'') or contains(.,''DEV_06C5'') or contains(.,''DEV_06C6'') or contains(.,''DEV_06C7'') or contains(.,''DEV_06C8'') or contains(.,''DEV_06C9'') or contains(.,''DEV_06CA'') or contains(.,''DEV_06CB'') or contains(.,''DEV_06CD'') or contains(.,''DEV_06D1'') or contains(.,''DEV_06D2'') or contains(.,''DEV_06DA'') or contains(.,''DEV_06DE'') or contains(.,''DEV_06DF'') or contains(.,''DEV_0DC0'') or contains(.,''DEV_0DC1'') or contains(.,''DEV_0DC2'') or contains(.,''DEV_0DC4'') or contains(.,''DEV_0DC5'') or contains(.,''DEV_0DC6'') or contains(.,''DEV_0DCA'') or contains(.,''DEV_0DCC'') or contains(.,''DEV_0DCD'') or contains(.,''DEV_0DCE'') or contains(.,''DEV_0DCF'') or contains(.,''DEV_0DD0'') or contains(.,''DEV_0DD1'') or contains(.,''DEV_0DD2'') or contains(.,''DEV_0DD3'') or contains(.,''DEV_0DD6'') or contains(.,''DEV_0DDA'') or contains(.,''DEV_0DDE'') or contains(.,''DEV_0DDF'') or contains(.,''DEV_0DE0'') or contains(.,''DEV_0DE1'') or contains(.,''DEV_0DE2'') or contains(.,''DEV_0DE3'') or contains(.,''DEV_0DE4'') or contains(.,''DEV_0DE5'') or contains(.,''DEV_0DE6'') or contains(.,''DEV_0DE7'') or contains(.,''DEV_0DE8'') or contains(.,''DEV_0DE9'') or contains(.,''DEV_0DEA'') or contains(.,''DEV_0DEB'') or contains(.,''DEV_0DEC'') or contains(.,''DEV_0DED'') or contains(.,''DEV_0DEE'') or contains(.,''DEV_0DEF'') or contains(.,''DEV_0DF0'') or contains(.,''DEV_0DF1'') or contains(.,''DEV_0DF2'') or contains(.,''DEV_0DF3'') or contains(.,''DEV_0DF4'') or contains(.,''DEV_0DF5'') or contains(.,''DEV_0DF6'') or contains(.,''DEV_0DF7'') or contains(.,''DEV_0DFC'') or contains(.,''DEV_0DFE'') or contains(.,''DEV_0DFF'') or contains(.,''DEV_0E21'') or contains(.,''DEV_0E22'') or contains(.,''DEV_0E23'') or contains(.,''DEV_0E24'') or contains(.,''DEV_0E25'') or contains(.,''DEV_0E28'') or contains(.,''DEV_0E30'') or contains(.,''DEV_0E31'') or contains(.,''DEV_0E32'') or contains(.,''DEV_0E38'') or contains(.,''DEV_0E3C'') or contains(.,''DEV_0E3E'') or contains(.,''DEV_0E3F'') or contains(.,''DEV_0F00'') or contains(.,''DEV_0F01'') or contains(.,''DEV_0F02'') or contains(.,''DEV_0F03'') or contains(.,''DEV_0FC0'') or contains(.,''DEV_0FC1'') or contains(.,''DEV_0FC2'') or contains(.,''DEV_0FC4'') or contains(.,''DEV_0FC5'') or contains(.,''DEV_0FC6'') or contains(.,''DEV_0FC8'') or contains(.,''DEV_0FC9'') or contains(.,''DEV_0FCB'') or contains(.,''DEV_0FCC'') or contains(.,''DEV_0FCE'') or contains(.,''DEV_0FCF'') or contains(.,''DEV_0FD0'') or contains(.,''DEV_0FD1'') or contains(.,''DEV_0FD2'') or contains(.,''DEV_0FD3'') or contains(.,''DEV_0FD4'') or contains(.,''DEV_0FD5'') or contains(.,''DEV_0FD8'') or contains(.,''DEV_0FD9'') or contains(.,''DEV_0FDA'') or contains(.,''DEV_0FDB'') or contains(.,''DEV_0FDC'') or contains(.,''DEV_0FDF'') or contains(.,''DEV_0FE0'') or contains(.,''DEV_0FE1'') or contains(.,''DEV_0FE2'') or contains(.,''DEV_0FE3'') or contains(.,''DEV_0FE4'') or contains(.,''DEV_0FE5'') or contains(.,''DEV_0FE6'') or contains(.,''DEV_0FE7'') or contains(.,''DEV_0FE8'') or contains(.,''DEV_0FE9'') or contains(.,''DEV_0FEA'') or contains(.,''DEV_0FEC'') or contains(.,''DEV_0FED'') or contains(.,''DEV_0FEE'') or contains(.,''DEV_0FF0'') or contains(.,''DEV_0FF1'') or contains(.,''DEV_0FF3'') or contains(.,''DEV_0FF5'') or contains(.,''DEV_0FF6'') or contains(.,''DEV_0FF7'') or contains(.,''DEV_0FF8'') or contains(.,''DEV_0FF9'') or contains(.,''DEV_0FFA'') or contains(.,''DEV_0FFB'') or contains(.,''DEV_0FFC'') or contains(.,''DEV_0FFD'') or contains(.,''DEV_0FFE'') or contains(.,''DEV_0FFF'') or contains(.,''DEV_1001'') or contains(.,''DEV_1003'') or contains(.,''DEV_1004'') or contains(.,''DEV_1005'') or contains(.,''DEV_1007'') or contains(.,''DEV_1008'') or contains(.,''DEV_100A'') or contains(.,''DEV_100B'') or contains(.,''DEV_100C'') or contains(.,''DEV_101E'') or contains(.,''DEV_101F'') or contains(.,''DEV_1020'') or contains(.,''DEV_1021'') or contains(.,''DEV_1022'') or contains(.,''DEV_1023'') or contains(.,''DEV_1024'') or contains(.,''DEV_1026'') or contains(.,''DEV_1027'') or contains(.,''DEV_1028'') or contains(.,''DEV_1029'') or contains(.,''DEV_102A'') or contains(.,''DEV_102B'') or contains(.,''DEV_103A'') or contains(.,''DEV_103B'') or contains(.,''DEV_103C'') or contains(.,''DEV_1040'') or contains(.,''DEV_1041'') or contains(.,''DEV_1042'') or contains(.,''DEV_1048'') or contains(.,''DEV_1049'') or contains(.,''DEV_104A'') or contains(.,''DEV_104B'') or contains(.,''DEV_104C'') or contains(.,''DEV_104D'') or contains(.,''DEV_1050'') or contains(.,''DEV_1051'') or contains(.,''DEV_1052'') or contains(.,''DEV_1054'') or contains(.,''DEV_1055'') or contains(.,''DEV_1056'') or contains(.,''DEV_1057'') or contains(.,''DEV_1058'') or contains(.,''DEV_1059'') or contains(.,''DEV_105A'') or contains(.,''DEV_105B'') or contains(.,''DEV_107C'') or contains(.,''DEV_107D'') or contains(.,''DEV_107E'') or contains(.,''DEV_107F'') or contains(.,''DEV_1080'') or contains(.,''DEV_1081'') or contains(.,''DEV_1082'') or contains(.,''DEV_1084'') or contains(.,''DEV_1086'') or contains(.,''DEV_1087'') or contains(.,''DEV_1088'') or contains(.,''DEV_1089'') or contains(.,''DEV_108B'') or contains(.,''DEV_108C'') or contains(.,''DEV_108E'') or contains(.,''DEV_1091'') or contains(.,''DEV_1094'') or contains(.,''DEV_1096'') or contains(.,''DEV_1098'') or contains(.,''DEV_1140'') or contains(.,''DEV_1144'') or contains(.,''DEV_1147'') or contains(.,''DEV_1149'') or contains(.,''DEV_114A'') or contains(.,''DEV_114B'') or contains(.,''DEV_1180'') or contains(.,''DEV_1182'') or contains(.,''DEV_1183'') or contains(.,''DEV_1184'') or contains(.,''DEV_1185'') or contains(.,''DEV_1187'') or contains(.,''DEV_1188'') or contains(.,''DEV_1189'') or contains(.,''DEV_118A'') or contains(.,''DEV_118B'') or contains(.,''DEV_118C'') or contains(.,''DEV_118D'') or contains(.,''DEV_118E'') or contains(.,''DEV_118F'') or contains(.,''DEV_1191'') or contains(.,''DEV_1192'') or contains(.,''DEV_1193'') or contains(.,''DEV_1194'') or contains(.,''DEV_1195'') or contains(.,''DEV_1198'') or contains(.,''DEV_1199'') or contains(.,''DEV_119D'') or contains(.,''DEV_119E'') or contains(.,''DEV_119F'') or contains(.,''DEV_11A0'') or contains(.,''DEV_11A1'') or contains(.,''DEV_11A2'') or contains(.,''DEV_11A3'') or contains(.,''DEV_11A4'') or contains(.,''DEV_11A5'') or contains(.,''DEV_11A7'') or contains(.,''DEV_11AA'') or contains(.,''DEV_11AC'') or contains(.,''DEV_11B1'') or contains(.,''DEV_11B4'') or contains(.,''DEV_11B6'') or contains(.,''DEV_11B7'') or contains(.,''DEV_11B8'') or contains(.,''DEV_11BA'') or contains(.,''DEV_11BB'') or contains(.,''DEV_11BC'') or contains(.,''DEV_11BD'') or contains(.,''DEV_11BE'') or contains(.,''DEV_11C0'') or contains(.,''DEV_11C1'') or contains(.,''DEV_11C2'') or contains(.,''DEV_11C3'') or contains(.,''DEV_11C4'') or contains(.,''DEV_11C5'') or contains(.,''DEV_11C6'')  or contains(.,''DEV_11C7'') or contains(.,''DEV_11C8'') or contains(.,''DEV_11CB'') or contains(.,''DEV_11D0'') or contains(.,''DEV_11D1'') or contains(.,''DEV_11D2'') or contains(.,''DEV_11D3'') or contains(.,''DEV_11E0'') or contains(.,''DEV_11E1'') or contains(.,''DEV_11E2'') or contains(.,''DEV_11E3'') or contains(.,''DEV_11FA'') or contains(.,''DEV_11FC'') or contains(.,''DEV_11FF'') or contains(.,''DEV_1200'') or contains(.,''DEV_1201'') or contains(.,''DEV_1202'') or contains(.,''DEV_1203'') or contains(.,''DEV_1205'') or contains(.,''DEV_1206'') or contains(.,''DEV_1207'') or contains(.,''DEV_1208'') or contains(.,''DEV_1210'') or contains(.,''DEV_1211'') or contains(.,''DEV_1212'') or contains(.,''DEV_1213'') or contains(.,''DEV_121F'') or contains(.,''DEV_1240'') or contains(.,''DEV_1241'') or contains(.,''DEV_1243'') or contains(.,''DEV_1244'') or contains(.,''DEV_1245'') or contains(.,''DEV_1246'') or contains(.,''DEV_1247'') or contains(.,''DEV_1248'') or contains(.,''DEV_1249'') or contains(.,''DEV_124B'') or contains(.,''DEV_124D'') or contains(.,''DEV_1250'') or contains(.,''DEV_1251'') or contains(.,''DEV_6780'') or contains(.,''DEV_6784'') or contains(.,''DEV_6788'') or contains(.,''DEV_678A'') or contains(.,''DEV_6790'') or contains(.,''DEV_6791'') or contains(.,''DEV_6792'') or contains(.,''DEV_6798'') or contains(.,''DEV_6799'') or contains(.,''DEV_679A'') or contains(.,''DEV_679B'') or contains(.,''DEV_679E'') or contains(.,''DEV_679F'') or contains(.,''DEV_6808'') or contains(.,''DEV_6809'') or contains(.,''DEV_6810'') or contains(.,''DEV_6811'') or contains(.,''DEV_6816'') or contains(.,''DEV_6817'') or contains(.,''DEV_6818'') or contains(.,''DEV_6819'') or contains(.,''DEV_684C'') or contains(.,''DEV_6800'') or contains(.,''DEV_6801'') or contains(.,''DEV_6802'') or contains(.,''DEV_6806'') or contains(.,''DEV_6828'') or contains(.,''DEV_6829'') or contains(.,''DEV_682C'') or contains(.,''DEV_6830'') or contains(.,''DEV_6831'') or contains(.,''DEV_6835'') or contains(.,''DEV_6837'') or contains(.,''DEV_6838'') or contains(.,''DEV_6839'') or contains(.,''DEV_683B'') or contains(.,''DEV_683D'') or contains(.,''DEV_683F'') or contains(.,''DEV_6820'') or contains(.,''DEV_6821'') or contains(.,''DEV_6822'') or contains(.,''DEV_6823'') or contains(.,''DEV_6824'') or contains(.,''DEV_6825'') or contains(.,''DEV_6826'') or contains(.,''DEV_6827'') or contains(.,''DEV_682A'') or contains(.,''DEV_682B'') or contains(.,''DEV_682D'') or contains(.,''DEV_682F'') or contains(.,''DEV_6608'') or contains(.,''DEV_6610'') or contains(.,''DEV_6611'') or contains(.,''DEV_6613'') or contains(.,''DEV_6617'') or contains(.,''DEV_6631'') or contains(.,''DEV_6600'') or contains(.,''DEV_6601'') or contains(.,''DEV_6602'') or contains(.,''DEV_6603'') or contains(.,''DEV_6604'') or contains(.,''DEV_6605'') or contains(.,''DEV_6606'') or contains(.,''DEV_6607'') or contains(.,''DEV_6620'') or contains(.,''DEV_6621'') or contains(.,''DEV_6623'') or contains(.,''DEV_6660'') or contains(.,''DEV_6663'') or contains(.,''DEV_6664'') or contains(.,''DEV_6665'') or contains(.,''DEV_6667'') or contains(.,''DEV_666F'') or contains(.,''DEV_73A1'') or contains(.,''DEV_73AE'') or contains(.,''DEV_9900'') or contains(.,''DEV_9901'') or contains(.,''DEV_9903'') or contains(.,''DEV_9904'') or contains(.,''DEV_9905'') or contains(.,''DEV_9906'') or contains(.,''DEV_9907'') or contains(.,''DEV_9908'') or contains(.,''DEV_9909'') or contains(.,''DEV_990A'') or contains(.,''DEV_990B'') or contains(.,''DEV_990C'') or contains(.,''DEV_990D'') or contains(.,''DEV_990E'') or contains(.,''DEV_990F'') or contains(.,''DEV_9910'') or contains(.,''DEV_9913'') or contains(.,''DEV_9917'') or contains(.,''DEV_9918'') or contains(.,''DEV_9919'') or contains(.,''DEV_9990'') or contains(.,''DEV_9991'') or contains(.,''DEV_9992'') or contains(.,''DEV_9993'') or contains(.,''DEV_9994'') or contains(.,''DEV_9995'') or contains(.,''DEV_9996'') or contains(.,''DEV_9997'') or contains(.,''DEV_9998'') or contains(.,''DEV_9999'') or contains(.,''DEV_999A'') or contains(.,''DEV_999B'') or contains(.,''DEV_999C'') or contains(.,''DEV_999D'') or contains(.,''DEV_99A0'') or contains(.,''DEV_99A2'') or contains(.,''DEV_99A4'') or contains(.,''DEV_990F'') or contains(.,''DEV_7460''))])', @GathererTypeId)
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -19546,6 +19594,12 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
 	VALUES(@FilterId, 'Error', '', 'NtSuccess\(D3DKMTCreateSynchronizationObject2\(&CreateArgs\)\)\: Create Notification for Mode Change Cancel. - Value \(0xc0000002\)', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', '', 'NtSuccess\(D3DKMTCreateSynchronizationObject2\(\&Args\)\) - Value \(0xc000000d\)', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', '', 'NtSuccess\(D3DKMTCreateSynchronizationObject2\(&CreateArgs\)\)\: Create Notification for Mode Change Cancel. - Value \(0xc000000d\)', 'UserText', 0, 0)
 
 	DELETE FROM @ParentNodes
 END
@@ -31738,6 +31792,52 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 61627 v28.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'WGF11Shader5x%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('WGF11Shader5x%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 61627 AND Version = 28
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(61627, 28, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WGF11 Shader5x tests', 'Shader 5x LoadStore\store_uav_typed test uses too tight a precision tolerance.', 'Just issuing a filter for affected hw', '2030-03-31T00:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(DISPLAY_BLOCK/Device/@HardwareID[contains(.,''PCI\VEN_1002'') and (contains(.,''DEV_731F'') or contains(.,''DEV_73A0'') or contains(.,''DEV_73A2'') or contains(.,''DEV_73A3'') or contains(.,''DEV_73A1'') or contains(.,''DEV_73AB'') or contains(.,''DEV_73AE'') or contains(.,''DEV_73BF'') or contains(.,''DEV_73C0'') or contains(.,''DEV_73C1'') or contains(.,''DEV_73DF'') or contains(.,''DEV_73C3'') or contains(.,''DEV_73FF'') or contains(.,''DEV_73E0'') or contains(.,''DEV_73E1'') or contains(.,''DEV_73E2'') or contains(.,''DEV_73E3'') or contains(.,''DEV_73AF'') or contains(.,''DEV_164D'') or contains(.,''DEV_164E'') or contains(.,''DEV_7420'') or contains(.,''DEV_7422'') or contains(.,''DEV_743F'') or contains(.,''DEV_73EF'') or contains(.,''DEV_1681'') or contains(.,''DEV_7424'') or contains(.,''DEV_73A5'') or contains(.,''DEV_1506'') or contains(.,''DEV_73F0'') or contains(.,''DEV_73C8'') or contains(.,''DEV_744C'')or contains(.,''DEV_7480'')or contains(.,''DEV_7481'')or contains(.,''DEV_7483'')or contains(.,''DEV_7489'')or contains(.,''DEV_748B'')or contains(.,''DEV_749F'')or contains(.,''DEV_15BF'')or contains(.,''DEV_15C8'')or contains(.,''DEV_7448'')or contains(.,''DEV_745E'') or contains(.,''DEV_747E'') or contains(.,''DEV_1901'') or contains(.,''DEV_7470'')or contains(.,''DEV_150E'') or contains(.,''DEV_1900'')or contains(.,''DEV_105E'')or contains(.,''DEV_7460'')or contains(.,''DEV_1586'')) ])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'store_uav_typed', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Ulp difference:', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-03-31T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 61996 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -42712,7 +42812,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-10-06T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 91401 v5.
+-- Inserting filter 91401 v6.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -42727,11 +42827,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 91401 AND Version = 5
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 91401 AND Version = 6
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(91401, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'GraphicsDriverSupportsUSB4', 'Graphics Driver Supports USB4 fails with error "Graphics adapter with LUID 0xyz does not support Usb4 monitors" ', 'This is acceptable failure for this driver', '2025-08-31T01:00:00')
+	VALUES(91401, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'GraphicsDriverSupportsUSB4', 'Graphics Driver Supports USB4 fails with error "Graphics adapter with LUID 0xyz does not support Usb4 monitors" ', 'This is acceptable failure for this driver', '2025-08-31T01:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -42740,8 +42840,11 @@ BEGIN
 
 ')
 
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22000","10.1.22621"]}')
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('RUNTIME_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(RUNTIME_BLOCK/BuildNumber[number(.) >= 22000 and number(.) <= 26100])', @GathererTypeId)
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -43760,7 +43863,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-08-09T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 95656 v4.
+-- Inserting filter 95656 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -43775,11 +43878,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 95656 AND Version = 4
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 95656 AND Version = 5
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(95656, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: HLK - HW/SW-DRM Video - Play protected content using fails - error 0xc00d36dd', 'HLK Errata: HLK - HW/SW DRM Video - Play protected content using software decryptor fails with Playback error on headless display', 'This is an acceptable failure', '2030-12-30T16:00:00')
+	VALUES(95656, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: HLK - HW/SW-DRM Video - Play protected content using fails - error 0xc00d36dd', 'HLK Errata: HLK - HW/SW DRM Video - Play protected content using software decryptor fails with Playback error on headless display', 'This is an acceptable failure', '2030-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -43790,7 +43893,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 	VALUES(@FilterId, 2, 'boolean(RUNTIME_BLOCK/BuildNumber[number(.) >= 19041])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_1002&DEV_73A1'') or contains (.,''PCI\VEN_1002&DEV_73A3'')])')
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''PCI\VEN_1002&DEV_73A1'') or contains (.,''PCI\VEN_1002&DEV_73A3'') or contains(.,''PCI\VEN_1002&DEV_7460'') or contains(.,''PCI\VEN_1002&DEV_7461'')])')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -46482,7 +46585,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 112463 v19.
+-- Inserting filter 112463 v20.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -46497,16 +46600,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 112463 AND Version = 19
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 112463 AND Version = 20
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(112463, 19, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WGF11 Geometry Shader - GS with streamout encounters AMD hardware issue', 'There''s a hardware bug limiting use of geometry shaders in conjunction with stream out, causing InstanceID test cases to fail.', 'The bug is to be fixed in a future release.', '2032-08-19T00:00:00')
+	VALUES(112463, 20, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WGF11 Geometry Shader - GS with streamout encounters AMD hardware issue', 'There''s a hardware bug limiting use of geometry shaders in conjunction with stream out, causing InstanceID test cases to fail.', 'The bug is to be fixed in a future release.', '2032-08-19T00:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//Devnode/DeviceID[contains(.,"PCI\VEN_1002&DEV_73F0") or contains(.,"PCI\VEN_1002&DEV_73BF") or contains(.,"PCI\VEN_1002&DEV_73C8")  or contains(.,"PCI\VEN_1002&DEV_73DF") or contains(.,"PCI\VEN_1002&DEV_7483")  or contains(.,"PCI\VEN_1002&DEV_7481") or contains(.,"PCI\VEN_1002&DEV_7480") or contains(.,"PCI\VEN_1002&DEV_7489")  or contains(.,"PCI\VEN_1002&DEV_748B")  or contains(.,"PCI\VEN_1002&DEV_749F") or contains(.,"PCI\VEN_1002&DEV_744C") or contains(.,"PCI\VEN_1002&DEV_15BF") or contains(.,"PCI\VEN_1002&DEV_15C8") or contains(.,"PCI\VEN_1002&DEV_7448") or contains(.,"PCI\VEN_1002&DEV_745E") or contains(.,"PCI\VEN_1002&DEV_747E") or contains(.,"PCI\VEN_1002&DEV_1901") or contains(.,"PCI\VEN_1002&DEV_747E") or contains(.,"PCI\VEN_1002&DEV_150E") or contains(.,"PCI\VEN_1002&DEV_7470") or contains(.,"PCI\VEN_1002&DEV_1900")])')
+	VALUES(@FilterId, 1, 'boolean(//Devnode/DeviceID[contains(.,"PCI\VEN_1002&DEV_73F0") or contains(.,"PCI\VEN_1002&DEV_73BF") or contains(.,"PCI\VEN_1002&DEV_73C8")  or contains(.,"PCI\VEN_1002&DEV_73DF") or contains(.,"PCI\VEN_1002&DEV_7483")  or contains(.,"PCI\VEN_1002&DEV_7481") or contains(.,"PCI\VEN_1002&DEV_7480") or contains(.,"PCI\VEN_1002&DEV_7489")  or contains(.,"PCI\VEN_1002&DEV_748B")  or contains(.,"PCI\VEN_1002&DEV_749F") or contains(.,"PCI\VEN_1002&DEV_744C") or contains(.,"PCI\VEN_1002&DEV_15BF") or contains(.,"PCI\VEN_1002&DEV_15C8") or contains(.,"PCI\VEN_1002&DEV_7448") or contains(.,"PCI\VEN_1002&DEV_745E") or contains(.,"PCI\VEN_1002&DEV_747E") or contains(.,"PCI\VEN_1002&DEV_1901") or contains(.,"PCI\VEN_1002&DEV_747E") or contains(.,"PCI\VEN_1002&DEV_150E") or contains(.,"PCI\VEN_1002&DEV_7470") or contains(.,"PCI\VEN_1002&DEV_1900") or contains(.,"PCI\VEN_1002&DEV_1586")])')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -46707,7 +46810,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 115994 AND Version = 11
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(115994, 11, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'HW-DRM - Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'This is an acceptable failure for now.', '2025-01-30T16:00:00')
+	VALUES(115994, 11, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'HW-DRM - Verify Codec Support Test- The decoder itself does not even work correctly with this profile ', 'This is an acceptable failure for now.', '2026-11-09T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -46739,7 +46842,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-11-09T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 116007 v2.
 SET @TestCommandLineId = NULL
@@ -49099,7 +49202,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 139334 v1.
+-- Inserting filter 139334 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -49114,11 +49217,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 139334 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 139334 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(139334, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'TrimToBudget fails with "Validating referenced allocation meet minimum usage expectations" error.', 'TrimToBudget fails with "Validating referenced allocation meet minimum usage expectations" error.', 'This issue will be fixed in a future OS release.', '2030-12-30T16:00:00')
+	VALUES(139334, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'TrimToBudget fails with "Validating referenced allocation meet minimum usage expectations" error.', 'TrimToBudget fails with "Validating referenced allocation meet minimum usage expectations" error.', 'This issue will be fixed in a future OS release.', '2030-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -49131,7 +49234,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 ', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x86 Ni OneCore","Windows v10.0 Client x86 Ni OneCoreUAP","Windows v10.0 Client x86 Ni Full","Windows v10.0 Client x64 Ni OneCore","Windows v10.0 Client x64 Ni OneCoreUAP","Windows v10.0 Client x64 Ni Full","Windows v10.0 Server x64 Ni OneCore","Windows v10.0 Server x64 Ni OneCoreUAP","Windows v10.0 Server x64 Ni Full","Windows v10.0 Client ARM Ni OneCore","Windows v10.0 Client ARM Ni OneCoreUAP","Windows v10.0 Client ARM64 Ni OneCore","Windows v10.0 Client ARM64 Ni OneCoreUAP","Windows v10.0 Client ARM64 Ni Full","Windows v10.0 Server ARM64 Ni OneCore","Windows v10.0 Server ARM64 Ni OneCoreUAP","Windows v10.0 Server ARM64 Ni Full"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x86 Ni OneCore","Windows v10.0 Client x86 Ni Full","Windows v10.0 Client x64 Ni OneCore","Windows v10.0 Client x64 Ni Full","Windows v10.0 Server x64 Ni OneCore","Windows v10.0 Server x64 Ni OneCoreUAP","Windows v10.0 Server x64 Ni Full","Windows v10.0 Client ARM Ni OneCore","Windows v10.0 Client ARM64 Ni OneCore","Windows v10.0 Client ARM64 Ni Full","Windows v10.0 Server ARM64 Ni OneCore","Windows v10.0 Server ARM64 Ni Full","Windows v10.0 Client x86 Ge OneCoreUAP","Windows v10.0 Client x86 Ge Full","Windows v10.0 Client x64 Ge OneCore","Windows v10.0 Client x64 Ge OneCoreUAP","Windows v10.0 Client x64 Ge Full","Windows v10.0 Server x64 Ge OneCore","Windows v10.0 Server x64 Ge OneCoreUAP","Windows v10.0 Server x64 Ge Full","Windows v10.0 Client ARM Ge OneCore","Windows v10.0 Client ARM Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge OneCore","Windows v10.0 Client ARM64 Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Server ARM64 Ge OneCore","Windows v10.0 Server ARM64 Ge OneCoreUAP","Windows v10.0 Server ARM64 Ge Full"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -51286,7 +51389,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-06-11T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 161094 v1.
+-- Inserting filter 161094 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -51301,11 +51404,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 161094 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 161094 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(161094, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Voice Clarity Loopback Sample Test requires unscaled speaker loopback', 'Voice Clarity Loopback Sample Test requires unscaled speaker loopback', 'This errata overturns the failure.', '2024-05-14T17:00:00')
+	VALUES(161094, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Voice Clarity Loopback Sample Test requires unscaled speaker loopback', 'Voice Clarity Loopback Sample Test requires unscaled speaker loopback', 'This errata overturns the failure.', '2024-05-14T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -51313,7 +51416,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[contains(.,"AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0462&REV_0A") or contains(., "AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0462&REV_0B") or contains(., "AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0486&REV_0C") or contains(., "AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0486&REV_0D")])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[contains(., "AUCD\VEN_QCOM&DEV_0C29")])', @GathererTypeId)
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -51324,7 +51427,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-14T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 161095 v2.
+-- Inserting filter 161095 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -51339,11 +51442,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 161095 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 161095 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(161095, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Voice Clarity Driver Timestamp Test requires small mic spk stream drift', 'Voice Clarity Loopback Sample Test requires small mic spk stream drift', 'This errata overturns the failure.', '2024-05-14T17:00:00')
+	VALUES(161095, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Voice Clarity Driver Timestamp Test requires small mic spk stream drift', 'Voice Clarity Loopback Sample Test requires small mic spk stream drift', 'This errata overturns the failure.', '2024-05-14T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -51351,7 +51454,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[contains(.,"AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0462&REV_0A") or contains(., "AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0462&REV_0B") or contains(., "AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0486&REV_0C") or contains(., "AUCD\VEN_QCOM&DEV_0C29&SUBSYS_MSHW0486&REV_0D") or contains(., "AUCD\VEN_QCOM&DEV_0C29&SUBSYS_CRD08380")])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[contains(., "AUCD\VEN_QCOM&DEV_0C29")])', @GathererTypeId)
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -52204,7 +52307,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-03-22T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 163289 v1.
+-- Inserting filter 163289 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -52219,23 +52322,23 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 163289 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 163289 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(163289, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Registration Test IMFSampleAllocator check fails on Platform DMFT', 'Platform DMFT uses an internal allocator. DMFTs are generally required to use the provided allocator. This causes all systems that use the platform DMFT to fail', 'Test updated to skip Platform DMFT checks, Errata issued', '2026-03-22T17:00:00')
+	VALUES(163289, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Registration Test IMFSampleAllocator check fails on Platform DMFT', 'Platform DMFT uses an internal allocator. DMFTs are generally required to use the provided allocator. This causes all systems that use the platform DMFT to fail', 'Test updated to skip Platform DMFT checks, Errata issued', '2026-03-22T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'Msg', 'Msg:UserText=DMFT 0.*uses provided allocator', 'CheckIMFSampleAllocatorImplementation.*Starting.*', 'UserText', 0, 0)
+	VALUES(@FilterId, 'Msg', 'Msg:UserText=DMFT .*uses provided allocator', 'CheckIMFSampleAllocatorImplementation.*Starting.*', 'UserText', 0, 0)
 
 	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
 
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', 'Msg:UserText=DMFT 0.*', 'DMFT . Index . uses internal allocator.*', 'UserText', 0, 0, @ParentLogNodeId)
+	VALUES(@FilterId, 'Error', 'Msg:UserText=DMFT .*', 'DMFT . Index . uses internal allocator.*', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
@@ -53065,49 +53168,6 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 164556 v1.
-SET @TestCommandLineId = NULL
-SET @FilterId = NULL
-SET @GathererTypeId = NULL
-SET @ParentLogNodeId = NULL
-
--- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash thirdpartyapo.unittests.dll%'
-IF @TestCommandLineId IS NULL
-BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash thirdpartyapo.unittests.dll%')
-	SELECT @TestCommandLineId = SCOPE_IDENTITY()
-END
-
--- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 164556 AND Version = 1
-IF @FilterId IS NULL
-BEGIN
-	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(164556, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: APO CLSID Test Failure', 'The APO CLSID test will fail in scenario where the driver is still valid but uses the sysvad samples CLSIDs. This causes some failures in the test when drivers are still using older CLSIDs.', 'An errata is issued to fix these failures by allowing the older drivers to pass.', '2034-03-28T17:00:00')
-	SELECT @FilterId = SCOPE_IDENTITY()
-
--- Inserting filter constraints
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client ARM64 Co Full","Windows v10.0 Client ARM64 Co OneCoreUAP","Windows v10.0 Client ARM64 Co OneCore","Windows v10.0 Client x64 Co Full","Windows v10.0 Client x64 Co OneCoreUAP","Windows v10.0 Client x64 Co OneCore","Windows v10.0 Client x86 Co Full","Windows v10.0 Client x86 Co OneCoreUAP","Windows v10.0 Client x86 Co OneCore","Windows v10.0 Client ARM64 Ni Full","Windows v10.0 Client ARM64 Ni OneCoreUAP","Windows v10.0 Client ARM64 Ni OneCore","Windows v10.0 Client x64 Ni Full","Windows v10.0 Client x64 Ni OneCoreUAP","Windows v10.0 Client x64 Ni OneCore","Windows v10.0 Client x86 Ni Full","Windows v10.0 Client x86 Ni OneCoreUAP","Windows v10.0 Client x86 Ni OneCore","Windows v10.0 Client ARM64 Ge OneCore","Windows v10.0 Client ARM64 Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Client x64 Ge Full","Windows v10.0 Client x64 Ge OneCoreUAP","Windows v10.0 Client x64 Ge OneCore"]}')
-
--- Inserting filter log nodes
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest', 'CTestApoClsids::TestClsidsSampleDriver', 'Title', 0, 0)
-
-	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
-
-	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', 'Error', 'The APO CLSIDs on device "', 'UserText', 0, 0, @ParentLogNodeId)
-
-	DELETE FROM @ParentNodes WHERE Depth >= 1
-
-	DELETE FROM @ParentNodes
-END
-ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2034-03-28T17:00:00' WHERE Id = @FilterId AND [Status] = 0
-
 -- Inserting filter 164702 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -53198,6 +53258,41 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 164843 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'wgf11resourceaccess.exe [[]MODIFIEDCMDLINE] -11on12%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('wgf11resourceaccess.exe [[]MODIFIEDCMDLINE] -11on12%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 164843 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(164843, 1, 0, 1, 0, 1, 0, 1, @TestCommandLineId, ' TDR during D3D12 - 11 on 12 - WGF11 Resource Access', 'There was a bug observed in the ecosystem which can cause TDR in some situations, preventing the test from completing. We worked with affected groups to understand the bug enough to confirm that it is unlikely to ever be encountered in real end-user scenarios', 'For now, we will issue a waiver to unblock certification, since we determined the issue isn''t serious enough to warrant blocking certification. ', '2024-05-30T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''ACPI\VEN_QCOM&DEV_0C36'')])')
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v10.0 Client x86 Ge OneCore","Windows v10.0 Client x86 Ge OneCoreUAP","Windows v10.0 Client x86 Ge Full","Windows v10.0 Client x64 Ge OneCore","Windows v10.0 Client x64 Ge OneCoreUAP","Windows v10.0 Client x64 Ge Full","Windows v10.0 Server x64 Ge OneCore","Windows v10.0 Server x64 Ge OneCoreUAP","Windows v10.0 Server x64 Ge Full","Windows v10.0 Client ARM Ge OneCore","Windows v10.0 Client ARM Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge OneCore","Windows v10.0 Client ARM64 Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Server ARM64 Ge OneCore","Windows v10.0 Server ARM64 Ge OneCoreUAP","Windows v10.0 Server ARM64 Ge Full"]}')
+
+-- Inserting filter log nodes
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 165012 v1.
 SET @TestCommandLineId = NULL
@@ -53293,6 +53388,44 @@ This test failure is not bad enough to block driver release, so we are proceedin
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-24T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 165038 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'rotateblt.exe'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('rotateblt.exe')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165038 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(165038, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WDDM RotateBlt tests may fail due to test rely on a explicit DX9 UMD and the driver using D3D9on12', 'A test change resulted in a previous filter no longer hitting the same error message.', 'Another test change will come to skip these tests instead of failing.', '2030-05-24T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('RUNTIME_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(RUNTIME_BLOCK/BuildNumber[number(.) >= 26080])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'Error', 'Root Node/RestoreMode/SetDisplayMode/GdiRotateGdiCddTest|||CreateI3D(&amp;pI3D.p, sAdapter.c_str()) returned 0x80004002', 'Line', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-05-24T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 165059 v1.
 SET @TestCommandLineId = NULL
@@ -53533,26 +53666,364 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-24T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 165297 v1.
+-- Inserting filter 165297 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
 SET @ParentLogNodeId = NULL
 
 -- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash verifyrunfromstoreandmatchingversions.dll%'
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash verifyrunfromstoreandmatchingversions.dll'
 IF @TestCommandLineId IS NULL
 BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash verifyrunfromstoreandmatchingversions.dll%')
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash verifyrunfromstoreandmatchingversions.dll')
 	SELECT @TestCommandLineId = SCOPE_IDENTITY()
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165297 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165297 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(165297, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Verify run from driver store support and file versioning (Graphics Drivers) failed with Expecting to find regkey UserModeDriverNameWow', 'Adapter are allowed to be 64-bit only and not support 32-bit apps through WoW.  This test requires the presence of a 32-bit driver.', 'The test will be change to reflect this.', '2029-12-31T16:00:00')
+	VALUES(165297, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Verify run from driver store support and file versioning (Graphics Drivers) failed with Expecting to find regkey UserModeDriverNameWow', 'Adapter are allowed to be 64-bit only and not support 32-bit apps through WoW.  This test requires the presence of a 32-bit driver. In addtion MCDM devices are allowed to not have a DX UMD that will fail the test in a similar way.', 'The test will be change to reflect this.', '2029-12-31T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Device[starts-with(@Type, "DEVICE_TYPE_COMPUTE")])', @GathererTypeId)
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Server ARM64 Ge Full","Windows v10.0 Server ARM64 Ge OneCoreUAP","Windows v10.0 Server ARM64 Ge OneCore","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Client ARM64 Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge OneCore","Windows v10.0 Server x64 Ge Full","Windows v10.0 Server x64 Ge OneCoreUAP","Windows v10.0 Server x64 Ge OneCore","Windows v10.0 Client x64 Ge Full","Windows v10.0 Client x64 Ge OneCoreUAP","Windows v10.0 Client x64 Ge OneCore"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'Error', 'Expecting to find regkey UserModeDriverNameWow', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'Error', 'Expecting to find regkey UserModeDriverName', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-12-31T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 165584 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash d3dconf_12_core.dll /name:D3DConf_12_LatestUMDVersions::*'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash d3dconf_12_core.dll /name:D3DConf_12_LatestUMDVersions::*')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165584 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(165584, 1, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'D3D12 - Latest version failing', 'D3D12 - Latest Version fails on some hardware', 'Fix in future driver release. ', '2024-05-07T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''ACPI\VEN_QCOM&DEV_0C36&REV_0043'')])')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndStartTest', 'D3DConf_12_LatestUMDVersions::ConformanceTest', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Error', 'Driver does not support the latest build version for the interface version reported.  ', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-07T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 165596 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash d3dconf_12_core.dll /name:D3DConf_12_5_RenderPass::* [CustomTaefCommandArgs]'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash d3dconf_12_core.dll /name:D3DConf_12_5_RenderPass::* [CustomTaefCommandArgs]')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165596 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(165596, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, ' Hamoa 1.0 - Copper/26052 [Conformance Failure] D3D12 Render Passes ', 'There were two failing issues stemming from the same problem in the render pass HLK tests. The tests were not correctly querying the GPU hardware for the multisample resolve support level, and were attempting to execute resolves on textures with a higher multisample resolve support then reported.', 'The bugs were fixed already in the OS, but these fixes will not flow to cover Ge releas.', '2030-05-30T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":0,"Values":["10.1.26080.26080"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'StartTest:LeakTest', 'D3DConf_12_5_RenderPass::EndingAccessResolve', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'SUCCEEDED(Result) - Value (0x80070057)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'StartTest', '', 'D3DConf_12_5_RenderPass::*', 'Title', 0, 0, @ParentLogNodeId)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 2
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Error 0x00000000', 'ErrorText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'SUCCEEDED(m_DCLCommandAllocator->Reset()) - Value (0x80004005)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'Setup fixture ''D3DConf_12_5_RenderPass::TestMethodSetup'' for the scope *', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 2
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'StartTest', 'Msg:UserText=D3D12ConfCleanup', 'LeakTest', 'Title', 0, 0, @ParentLogNodeId)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 2
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '', 'AreEqual\(g_LeakTracker.m_Refs, 0u\) - Values \(1, 0\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 2
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 165632 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'DXGIPresent.exe FSPresentMS [[]MODIFIEDCMDLINE]%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('DXGIPresent.exe FSPresentMS [[]MODIFIEDCMDLINE]%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165632 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(165632, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: DXGIPresent.exe FSPresentMS failures due to link training race condition', 'DXGIPresent.exe FSPresentMS failures due to link training race condition', 'This is an acceptable failure', '2024-06-08T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('RUNTIME_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(RUNTIME_BLOCK/BuildNumber[number(.) >= 26080 and number(.) <= 26100])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'FSPresentMS', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', '!Msg=GetDisplaySurfaceData on swap chain failed.', 'Leaving fullscreen due to monitor power state', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'FSPresentMS', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', '!Msg=PerformPresent on multisampled swap chain failed', 'Leaving fullscreen due to monitor power state', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-06-08T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 165636 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash devfund_sleep_with_io_during_wlk_certification.dll%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash devfund_sleep_with_io_during_wlk_certification.dll%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165636 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(165636, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: DF-Sleep with IO During (reliability) test failure when targeting the USB controller when this has a USB WLAN device connected.', 'DF-Sleep with IO During (reliability) test failure when targeting the USB controller when this has a USB WLAN device connected.', 'This is an acceptable failure', '2024-05-24T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('RUNTIME_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(RUNTIME_BLOCK/BuildNumber[number(.) >= 26080 and number(.) <= 26100])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'End', 'WDTF_SIMPLEIO_NETWORK     : WDTF_SIMPLE_IO_NETWORK:RefreshIpInfo\(\) - The Network interface operation status is not IfOperStatusUp.', 'UserText', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'WDTF_SIMPLEIO_NETWORK     : WDTF_SIMPLE_IO_NETWORK:RefreshIpInfo\(\) - The Network interface operation status is not IfOperStatusUp.', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-24T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 165907 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '[[]WttRunWorkingDir]\ptlogo.exe%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('[[]WttRunWorkingDir]\ptlogo.exe%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 165907 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(165907, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'SurfaceTouchpadSettingsExtensionPackage.0.0.6.0_Fail - Copy', 'SurfaceTouchpadSettingsExtensionPackage.0.0.6.0_Fail - Copy', 'This an acceptable failure', '2025-08-30T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621","10.1.19041"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Input Resolution', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Sampling rate out of range: 124, required: 125', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Report Rate', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Sampling rate out of range: 124, required: 125', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Sampling rate out of range: 123, required: 125', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Stationary Jitter', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Sampling rate out of range: 124, required: 125', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'EndTest', 'Sampling rate out of range: 123, required: 125', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-08-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 166014 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash verifyrunfromstoreandmatchingversions.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash verifyrunfromstoreandmatchingversions.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 166014 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(166014, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Temporary waiver to enable OEM launches for the test: Verify run from driver store support and file versioning (Graphics Drivers)', 'Several error exist in the Qualcomm drivers that are fixed in a post-launch update: File version does not match INF version for file, and the inf driver version does not match the expected pattern. ', 'The driver is fixed and a updated hlkx has been submitted. Waiver is to enable manufacturing to use an older image. ', '2024-05-10T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53569,10 +54040,89 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
 	VALUES(@FilterId, 'Error', 'Error', 'Expecting to find regkey UserModeDriverNameWow', 'UserText', 0, 0)
 
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'Error', 'Checking file version against INF version for file', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'Error', 'AreEqual\(pszInfDriverVersion', 'UserText', 0, 0)
+
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-12-31T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-05-10T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 166025 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash infverifhlk.dll%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash infverifhlk.dll%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 166025 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(166025, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[Erratum] WHCP "DF- InfVerif INF Verification" test fails for Realtek driver that uses both HKCR and HKR registrations', 'The driver inf verif test will fail for audio drivers that are using HKCR. We need an exception for Realtek while they are transitioning their driver from HKCR to HKR.', 'This filter bypasses the failure.', '2025-04-30T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v10.0 Server x64 Ge Full","Windows v10.0 Client x64 Ge Full","Windows v10.0 Client x64 Ge OneCore","Windows v10.0 Client x64 Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge OneCore","Windows v10.0 Client ARM64 Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Server x64 Ge OneCore","Windows v10.0 Server x64 Ge OneCoreUAP","Windows v10.0 Server ARM64 Ge OneCore","Windows v10.0 Server ARM64 Ge OneCoreUAP","Windows v10.0 Server ARM64 Ge Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', '!Error', 'Cannot modify HKCR.*registry subkey. It must be under HKR.', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 166032 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash microsoftdisplaycapturetests.hlk.dll /name:MicrosoftDisplayCaptureTools::Tests::%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash microsoftdisplaycapturetests.hlk.dll /name:MicrosoftDisplayCaptureTools::Tests::%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 166032 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(166032, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Display Capture Tests Failing for virtual WDDM devices.', 'The Display Capture tests require a special hardware device for capturing video frames and comparing them to generated expectations. These devices do not make sense as requirements for virtual WDDM devices.', 'Issue will be filtered on request by makers of virtual WDDM drivers', '2026-03-31T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Device[starts-with(@Name,"VMware")])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Assert', 'EndTest:Title=MicrosoftDisplayCaptureTools', 'Cannot generate display to capture mappings without a display engine, capture card, and toolbox.', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-03-31T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 
 -- Deprecating filter 6994 v1.
@@ -58824,3 +59374,9 @@ SET @FilterId = NULL
 SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 103874 AND Version = 4
 IF @FilterId IS NOT NULL
 	UPDATE Filter SET [Status] = '0', ExpirationDate = '2022-11-22T16:00:00' WHERE Id = @FilterId
+
+-- Deprecating filter 164556 v1.
+SET @FilterId = NULL
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 164556 AND Version = 1
+IF @FilterId IS NOT NULL
+	UPDATE Filter SET [Status] = '0', ExpirationDate = '2024-03-28T17:00:00' WHERE Id = @FilterId
