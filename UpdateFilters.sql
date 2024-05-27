@@ -36873,6 +36873,57 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 80447 v4.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe [[]TestDll] /name=[[]TestName] /p:"APServer=[[]APControllerIPAddress]" /p:DeviceSupports5Ghz=[[]TestDeviceSupports5ghz] /p:"ServiceAPChannelAddress=[[]ServiceAPChannelAddress]"  /p:"DriverFullPath=[[]LocalDir]\" /inproc'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe [[]TestDll] /name=[[]TestName] /p:"APServer=[[]APControllerIPAddress]" /p:DeviceSupports5Ghz=[[]TestDeviceSupports5ghz] /p:"ServiceAPChannelAddress=[[]ServiceAPChannelAddress]"  /p:"DriverFullPath=[[]LocalDir]\" /inproc')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 80447 AND Version = 4
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(80447, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WLAN Wake - Packet Tests - Functional failed for Device power off more than 2 times during CS session', 'There is a HLK infrastructure issue which DUT''s HLKSVC keep sending unexpected name query packets though the current available connection during test run. This issue keep bring the new S0Idle power mode based wlan driver wake.', 'Needs to filter out the Power cycle count failture from the test result.', '2025-11-09T23:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22000","10.1.22621","10.1.26100"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=HckTests.WakeScenarioTests.WakeByPKT', 'HckTests.WakeScenarioTests.WakeByPKT', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'Msg', 'Testing WIFICX Based Driver:True', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Error', 'Device power off more than 2 times during CS session', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Error', 'Device power on more than 2 times during CS session, see NicActive and WakeReason summary', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-11-09T23:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 80453 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -41717,7 +41768,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-13T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 87894 v6.
+-- Inserting filter 87894 v7.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -41732,11 +41783,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 87894 AND Version = 6
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 87894 AND Version = 7
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(87894, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata: NDISTest 6.5 - PM_Requirements and GenericMiniportRequirements - Not Applicable for MBB (Mobile Broadband)', 'This test does not apply to MBB (Mobile Broadband) devices and so failures can be ignored.', 'This is an acceptable failure.', '2026-11-09T16:00:00')
+	VALUES(87894, 7, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata: NDISTest 6.5 - PM_Requirements and GenericMiniportRequirements - Not Applicable for MBB (Mobile Broadband)', 'This test does not apply to MBB (Mobile Broadband) devices and so failures can be ignored.', 'This is an acceptable failure.', '2026-11-09T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -41747,7 +41798,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'NETWORK_BLOCK')
 	VALUES(@FilterId, 2, 'boolean(//mediatype[contains(.,''WirelessWan'')])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22000","10.1.22621","10.1.26080"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22000","10.1.22621","10.1.26080","10.1.26100"]}')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"FeatureID","MatchType":2,"Values":["Network.MobileBroadband"]}')
@@ -54123,6 +54174,52 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 167730 v5.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'wgf11filter.exe %'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('wgf11filter.exe %')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167730 AND Version = 5
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(167730, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'D3D12 - 11 on 12 - WGF11 Filter test may show failures where previously passes were seen due to changes in WARP', 'The old REF previously had a bug where it calculated MIP_POINT incorrectly, and hence choosing a wrong mip. The old WGF11Filter tests accounted for this bug by allowing both the correct and incorrect versions to pass. As REF is deprecated, we fixed the test and hardwares that relied on REF as a baseline will fail this test. ', 'Waiver issued for older devices failing all tests that uses MIP_POINT as a parameter. Waiver set to expire in 2030 when newer hardware will phase out the old hardwares.', '2027-04-17T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Device[starts-with(@HardwareID,"PCI\VEN_1002") and (contains(.,''DEV_74'') or contains(.,''DEV_73'') or contains(.,''DEV_13C0'') or contains (.,''DEV_66AF'') or contains(.,''DEV_1638'')) ] | //Device[starts-with(@HardwareID,"PCI\VEN_8086") ]) ', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Filter\\*', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', '', 'Filter_Type = .*MIP_POINT', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2027-04-17T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 167737 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -55975,26 +56072,26 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-19T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 172396 v1.
+-- Inserting filter 172396 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
 SET @ParentLogNodeId = NULL
 
 -- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash ndis.studio.oidrequesttest.dll /name:NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN_VENDOR%'
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash ndis.studio.oidrequesttest.dll /name:NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN%'
 IF @TestCommandLineId IS NULL
 BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash ndis.studio.oidrequesttest.dll /name:NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN_VENDOR%')
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash ndis.studio.oidrequesttest.dll /name:NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN%')
 	SELECT @TestCommandLineId = SCOPE_IDENTITY()
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 172396 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 172396 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(172396, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: [NdisStudio] OidRequestTest - OID_GEN_VENDOR_DRIVER_VERSION and OID_GEN_VENDOR_ID Verification test fail', 'HLK Errata: [NdisStudio] OidRequestTest - OID_GEN_VENDOR_DRIVER_VERSION Verification and OID_GEN_VENDOR_ID Verification test fail. The NdisStudio test protocol is only setting “ndis5” as its lower range.', 'This is an acceptable failure', '2025-12-30T16:00:00')
+	VALUES(172396, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: [NdisStudio] OidRequestTest - OID_GEN_VENDOR_DRIVER_VERSION and OID_GEN_VENDOR_ID Verification test fail', 'HLK Errata: [NdisStudio] OidRequestTest - OID_GEN_VENDOR_DRIVER_VERSION Verification and OID_GEN_VENDOR_ID Verification test fail. The NdisStudio test protocol is only setting “ndis5” as its lower range.', 'This is an acceptable failure', '2025-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -56012,7 +56109,7 @@ BEGIN
 	VALUES(@FilterId, 'Error', 'Msg', 'Setup fixture ''NdisStudioOidRequestTest::OidRequestTest::TestClassSetup'' for the scope ''NdisStudioOidRequestTest::OidRequestTest'' failed.', 'UserText', 0, 0)
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest:Title=NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN_VENDOR_*', 'NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN_VENDOR_*', 'Title', 0, 0)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN*', 'NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN*', 'Title', 0, 0)
 
 	DELETE FROM @ParentNodes
 END
