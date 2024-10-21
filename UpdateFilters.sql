@@ -25059,7 +25059,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-07-01T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 40693 v4.
+-- Inserting filter 40693 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -25074,11 +25074,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 40693 AND Version = 4
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 40693 AND Version = 5
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(40693, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Raytracing test fixes not showing up in EEAP', 'Fixes for several raytracing tests have been made but don''t appear to have made it into latest EEAP builds.  Issuing errata to stop delaying IHVs.', 'IHVs can see the fixed binaries in 19H1 HLK.', '2024-12-30T16:00:00')
+	VALUES(40693, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Raytracing test fixes not showing up in EEAP', 'Fixes for several raytracing tests have been made but don''t appear to have made it into latest EEAP builds.  Issuing errata to stop delaying IHVs.', 'IHVs can see the fixed binaries in 19H1 HLK.', '2026-05-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -25133,7 +25133,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 40695 v5.
 SET @TestCommandLineId = NULL
@@ -40419,6 +40419,53 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 84083 v4.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash devfund%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash devfund%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 84083 AND Version = 4
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(84083, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Plugin for DevFund times out on Photo Pins for Camera', 'FrameReader is selecting the First Frame Source regardless of type. For Photo pins, we don''t get the required frame count before RunIO times out.', 'Errata Issued', '2028-07-31T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.0.22631","10.1.22631"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Msg', 'EndTest:Title=.*', 'SIMPLEIO.*WEBCAM.*RunIO Failed.*800705b4', 'UserText', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Msg:UserText=.*', '.*This operation returned because the timeout period expired.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Msg:UserText=.*', '.*No Error Info Provided.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2028-07-31T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 84121 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -42686,6 +42733,49 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 91345 v8.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%AudioLogo_taef%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%AudioLogo_taef%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 91345 AND Version = 8
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(91345, 8, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'AudioLogo (system) enforces channel count on default mode', 'AudioLogo incorrectly enforces a channel count on default mode.', 'This errata overturns the failure.', '2026-10-06T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":1,"Values":["10.1.22000","10.1.22621"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=AudioLogoTaef::TC_VerifyMicArrayRawFormat', 'AudioLogoTaef::TC_VerifyMicArrayRawFormat', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!Error', 'FAIL: Microphone array mix format has more channels in normal mode \(.*\) than in RAW mode \(.*\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-10-06T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 91401 v6.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -42787,6 +42877,46 @@ This does appear to be a test bug. For some reason the QueryStatistics call in t
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 91812 v4.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%AudioLogo.exe%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%AudioLogo.exe%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 91812 AND Version = 4
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(91812, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'AudioLogo (system) enforces channel count on default mode', 'AudioLogo incorrectly enforces a channel count on default mode.', 'This errata overturns the failure.', '2025-12-30T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=Generic\\Verify Microphone Array RAW format', 'Generic\\Verify Microphone Array RAW format', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!Error', 'FAIL: Microphone array mix format has more channels in normal mode \(.*\) than in RAW mode \(.*\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 92431 v13.
 SET @TestCommandLineId = NULL
@@ -43674,6 +43804,49 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-26T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 96061 v5.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging% directed-fx-taef-system.dll%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging% directed-fx-taef-system.dll%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 96061 AND Version = 5
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(96061, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata - Directed DFX System Verification Test fail; failed because GPIO driver does not support DFX', 'HLK Errata - Directed DFX System Verification Test fail; failed because GPIO driver does not support DFX', 'This is an acceptable failure', '2026-11-09T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Co Full","Windows v10.0 Client x64 Vb Full","Windows v10.0 Client x64 Ni Full","Windows v10.0 Client x64 Ge Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'DirectedFx::Taef::DirectedFxSystemTest::SystemVerificationTest', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!Error', 'failed because device ''Intel\(R\) UsbGpio Device \(.+\)'' does not support DFX.', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-11-09T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 96334 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -44318,7 +44491,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-13T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 101628 v3.
+-- Inserting filter 101628 v4.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -44333,11 +44506,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 101628 AND Version = 3
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 101628 AND Version = 4
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(101628, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: MJPEG Decoder HMFT Provides Displayable Resources'' fails with error ''MFSamples underlying D3D11Texture2D is not displaybale''', 'This requirement was created when displayables were expected to be required by WDDM3.0. That is no longer the case.', 'This is an acceptable failure', '2024-12-30T16:00:00')
+	VALUES(101628, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: MJPEG Decoder HMFT Provides Displayable Resources'' fails with error ''MFSamples underlying D3D11Texture2D is not displaybale''', 'This requirement was created when displayables were expected to be required by WDDM3.0. That is no longer the case.', 'This is an acceptable failure', '2025-04-29T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -44365,7 +44538,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 102825 v1.
 SET @TestCommandLineId = NULL
@@ -44425,7 +44598,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 103191 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(103191, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Test EffectsList Default APO E_NOTIMPL', 'APOs can cause an error with how one of the MSFT inbox APOs functions in a test scenario. The inbox APO will return a value of E_NOTIMPL when the test expects otherwise. ', 'An errata is created to show that the test passes if a device is used and the E_NOTIMPL error occurs. ', '2024-12-30T23:00:00')
+	VALUES(103191, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Test EffectsList Default APO E_NOTIMPL', 'APOs can cause an error with how one of the MSFT inbox APOs functions in a test scenario. The inbox APO will return a value of E_NOTIMPL when the test expects otherwise. ', 'An errata is created to show that the test passes if a device is used and the E_NOTIMPL error occurs. ', '2029-12-30T23:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -44451,7 +44624,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T23:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-12-30T23:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 103544 v3.
 SET @TestCommandLineId = NULL
@@ -44746,7 +44919,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 104741 AND Version = 5
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(104741, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Wave test failure on unified Bluetooth devices', 'Wave test fails a multi-stream test because of limitations with A2DP and HFP on unified Bluetooth devices.', 'This erratum will cover the issue until the test is updated.', '2024-12-29T23:00:00')
+	VALUES(104741, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Wave test failure on unified Bluetooth devices', 'Wave test fails a multi-stream test because of limitations with A2DP and HFP on unified Bluetooth devices.', 'This erratum will cover the issue until the test is updated.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -44787,7 +44960,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-29T23:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 105154 v2.
 SET @TestCommandLineId = NULL
@@ -46826,7 +46999,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-10-07T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 126448 v1.
+-- Inserting filter 126448 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -46841,11 +47014,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 126448 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 126448 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(126448, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: WDDM 3.0 Hardware Flip Queue Check - FeatureCheck::IsHwFlipQueueStableOrAlwaysOn', 'This is a by design HLK test failure that allows Microsoft to control whether an IHV is allowed to enable HwFlipQueue feature. Now that the IHV passed the quality bar, we need to grant a corresponding errata.', 'This is a by design HLK test failure that allows Microsoft to control whether an IHV is allowed to enable HwFlipQueue feature. Now that the IHV passed the quality bar, we need to grant a corresponding errata.', '2024-11-26T16:00:00')
+	VALUES(126448, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: WDDM 3.0 Hardware Flip Queue Check - FeatureCheck::IsHwFlipQueueStableOrAlwaysOn', 'This is a by design HLK test failure that allows Microsoft to control whether an IHV is allowed to enable HwFlipQueue feature. Now that the IHV passed the quality bar, we need to grant a corresponding errata.', 'This is a by design HLK test failure that allows Microsoft to control whether an IHV is allowed to enable HwFlipQueue feature. Now that the IHV passed the quality bar, we need to grant a corresponding errata.', '2026-05-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -46862,7 +47035,48 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-11-26T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 127433 v2.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%lullaby%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%lullaby%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 127433 AND Version = 2
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(127433, 2, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK AutoTriage: Audio Codec - Lullaby Test - Certification - Desktop', 'Lullaby test loses synchronization when endpoints are not ready to stream right after returning from the target power state.', 'Please contact CSS to get a private binary which compensates for this limitation.', '2025-01-14T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621","10.1.26100"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', '!', 'Failed.*AUDCLNT_E_UNSUPPORTED_FORMAT.*', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', '!', '.*AUDCLNT_E_DEVICE_INVALIDATED.*', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', '!', 'ERROR: The device with endpoint ID .* is no longer valid and reports state 0x4.*', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 127669 v1.
 SET @TestCommandLineId = NULL
@@ -48131,26 +48345,26 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 138523 v1.
+-- Inserting filter 138523 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
 SET @ParentLogNodeId = NULL
 
 -- Inserting test command line
-SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe%hlkcameracontrolstest.dll%CameraControlsSystemTests%ID%2601"'
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe%hlkcameracontrolstest.dll%CameraControlsSystemTests%ID%01"'
 IF @TestCommandLineId IS NULL
 BEGIN
-	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe%hlkcameracontrolstest.dll%CameraControlsSystemTests%ID%2601"')
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe%hlkcameracontrolstest.dll%CameraControlsSystemTests%ID%01"')
 	SELECT @TestCommandLineId = SCOPE_IDENTITY()
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 138523 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 138523 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(138523, 1, 1, 1, 0, 1, 0, 0, @TestCommandLineId, 'MEP Based VideoHDR does not check Photo pin for supported', 'VideoStabilization DDI Usage has been updated, pin level checks for the DDI are removed', 'Tests Updated, Errata Issued', '2024-11-30T16:00:00')
+	VALUES(138523, 2, 1, 1, 0, 1, 0, 0, @TestCommandLineId, 'MEP Based VideoHDR does not check Photo pin for supported', 'VideoStabilization DDI Usage has been updated, pin level checks for the DDI are removed', 'Tests Updated, Errata Issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -48169,7 +48383,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-11-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 138640 v2.
 SET @TestCommandLineId = NULL
@@ -50225,7 +50439,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 161095 AND Version = 6
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(161095, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Voice Clarity Driver Timestamp Test requires small mic spk stream drift', 'Voice Clarity Loopback Sample Test requires small mic spk stream drift', 'This errata overturns the failure.', '2025-01-30T16:00:00')
+	VALUES(161095, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Voice Clarity Driver Timestamp Test requires small mic spk stream drift', 'Voice Clarity Loopback Sample Test requires small mic spk stream drift', 'This errata overturns the failure.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -50257,7 +50471,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 161438 v1.
 SET @TestCommandLineId = NULL
@@ -50357,7 +50571,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 161796 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(161796, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'MediaCodec - Filter for VideoProcessor - Tone Mapper tests', 'Intel''s ToneMapper functionality does not fully align with the Win2024 requirement right now and Intel''s Tone Mapper implementation needs to match the standards set by Microsoft and are currently failing tests', 'Intel has requested a waiver for a 6-month period to correctly implement the ToneMapper as per MSFT guidelines', '2024-11-14T16:00:00')
+	VALUES(161796, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'MediaCodec - Filter for VideoProcessor - Tone Mapper tests', 'Intel''s ToneMapper functionality does not fully align with the Win2024 requirement right now and Intel''s Tone Mapper implementation needs to match the standards set by Microsoft and are currently failing tests', 'Intel has requested a waiver for a 6-month period to correctly implement the ToneMapper as per MSFT guidelines', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -50374,7 +50588,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-11-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 162178 v4.
 SET @TestCommandLineId = NULL
@@ -51106,7 +51320,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 163288 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(163288, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Validation of UVC MJPG Translation Opt-in always fails for UVC IR Camera', 'Test checks for MJPG Translation Opt-in on all cameras, including IR Cameras which will not need this feature', 'Errata issued, Test updated', '2025-03-22T17:00:00')
+	VALUES(163288, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Validation of UVC MJPG Translation Opt-in always fails for UVC IR Camera', 'Test checks for MJPG Translation Opt-in on all cameras, including IR Cameras which will not need this feature', 'Errata issued, Test updated', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -51117,7 +51331,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-03-22T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 163289 v3.
 SET @TestCommandLineId = NULL
@@ -51138,7 +51352,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 163289 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(163289, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Registration Test IMFSampleAllocator check fails on Platform DMFT', 'Platform DMFT uses an internal allocator. DMFTs are generally required to use the provided allocator. This causes all systems that use the platform DMFT to fail', 'Test updated to skip Platform DMFT checks, Errata issued', '2026-03-22T17:00:00')
+	VALUES(163289, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Registration Test IMFSampleAllocator check fails on Platform DMFT', 'Platform DMFT uses an internal allocator. DMFTs are generally required to use the provided allocator. This causes all systems that use the platform DMFT to fail', 'Test updated to skip Platform DMFT checks, Errata issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -51157,7 +51371,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-03-22T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 163410 v2.
 SET @TestCommandLineId = NULL
@@ -51902,7 +52116,7 @@ BEGIN
 
 RuleId: 0x210001, ErrorMessage: Registry operations should only use key handles returned from WDF or WDM APIs. Detected deletion of value under unisolated registry key relative to RTL_REGISTRY_DEVICEMAP: SERIALCOMM, Module: c:\windows\system32\drivers\serial.sys, ModuleVersion: 10.0.26085.1, ModuleProvider: Microsoft Corporation, PublishedInf: msports.inf, InfPath: C:\Windows\System32\DriverStore\FileRepository\msports.inf_amd64_38e304153c99bef8\msports.inf, InfVersion: 06/21/2006 10.0.26085.1, InfProvider: Microsoft, Irql: 0
 
-This is an acceptable failure.', '2025-04-29T17:00:00')
+This is an acceptable failure.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -51924,7 +52138,7 @@ This is an acceptable failure.', '2025-04-29T17:00:00')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 164702 v2.
 SET @TestCommandLineId = NULL
@@ -51950,7 +52164,7 @@ BEGIN
 RuleId: 0x210001, ErrorMessage: Registry operations should only use key handles returned from WDF or WDM APIs. Detected creation of unisolated registry key \REGISTRY\MACHINE\HARDWARE\DEVICEMAP\SERIALCOMM, Module: c:\windows\system32\drivers\wudfrd.sys, ModuleVersion: 10.0.26080.1, ModuleProvider: Microsoft Corporation, PublishedInf: , InfPath: , InfVersion: , InfProvider: , Irql: 0
 
   This is an acceptable failure.
-', '2025-04-29T17:00:00')
+', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -51972,7 +52186,7 @@ RuleId: 0x210001, ErrorMessage: Registry operations should only use key handles 
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 164746 v3.
 SET @TestCommandLineId = NULL
@@ -52668,7 +52882,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167195 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167195, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Registration Test IMFSampleAllocator check fails on Platform DMFT', 'Platform DMFT uses an internal allocator. DMFTs are generally required to use the provided allocator. This causes all systems that use the platform DMFT to fail', 'Test updated to skip Platform DMFT checks, Errata issued', '2026-03-22T17:00:00')
+	VALUES(167195, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Registration Test IMFSampleAllocator check fails on Platform DMFT', 'Platform DMFT uses an internal allocator. DMFTs are generally required to use the provided allocator. This causes all systems that use the platform DMFT to fail', 'Test updated to skip Platform DMFT checks, Errata issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -52687,7 +52901,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-03-22T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 167196 v1.
 SET @TestCommandLineId = NULL
@@ -52708,7 +52922,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167196 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167196, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[Camera Driver Controls System Test - Framerate Throttle - Verify Mode Switching] - Does not account for Step Sizes', 'Frame Rate Throttle test does not check min/max/step before attempting to set value. Value set was always 80, which not all drivers support', 'Test accurately reads step size and sets a valid step in sequence.', '2025-04-05T17:00:00')
+	VALUES(167196, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[Camera Driver Controls System Test - Framerate Throttle - Verify Mode Switching] - Does not account for Step Sizes', 'Frame Rate Throttle test does not check min/max/step before attempting to set value. Value set was always 80, which not all drivers support', 'Test accurately reads step size and sets a valid step in sequence.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -52727,7 +52941,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 167197 v1.
 SET @TestCommandLineId = NULL
@@ -52748,7 +52962,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167197 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167197, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Sensor Camera Profiles - Photo Sequence with MEP Camera fails', 'Camera Drivers that implement Photo Sequence and Photo Sequence Profile that then opt into MEP have that control and profile removed. The test calls a public API to get profile support, and Photo Sequence profile is obtained. The test then sets this profile, which succeeds, and then the control, which fails. The API should not return that Photo Sequence profile is supported', 'API to be updated, errata issued', '2025-04-05T17:00:00')
+	VALUES(167197, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Sensor Camera Profiles - Photo Sequence with MEP Camera fails', 'Camera Drivers that implement Photo Sequence and Photo Sequence Profile that then opt into MEP have that control and profile removed. The test calls a public API to get profile support, and Photo Sequence profile is obtained. The test then sets this profile, which succeeds, and then the control, which fails. The API should not return that Photo Sequence profile is supported', 'API to be updated, errata issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -52771,7 +52985,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 167206 v1.
 SET @TestCommandLineId = NULL
@@ -52838,7 +53052,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167453 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167453, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Media Capture TestFrameExposureControlWithCapture uses wrong Table Entry', 'HLK Test uses the wrong table IDs for this test, which creates a null set for variable photo sequence. ', 'Test XML updated, Errata issued.', '2025-04-05T17:00:00')
+	VALUES(167453, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Media Capture TestFrameExposureControlWithCapture uses wrong Table Entry', 'HLK Test uses the wrong table IDs for this test, which creates a null set for variable photo sequence. ', 'Test XML updated, Errata issued.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -52857,7 +53071,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 167494 v2.
 SET @TestCommandLineId = NULL
@@ -52878,7 +53092,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167494 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167494, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Controls System Test - VFR - Verify correct Pin fails for MEP devices', 'Test checks for control on Photo Pin, but Photo pin is redirected to Preview Pin, causing test to fail', 'Test updated, Errata issued', '2025-04-05T17:00:00')
+	VALUES(167494, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Controls System Test - VFR - Verify correct Pin fails for MEP devices', 'Test checks for control on Photo Pin, but Photo pin is redirected to Preview Pin, causing test to fail', 'Test updated, Errata issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -52892,7 +53106,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 167730 v8.
 SET @TestCommandLineId = NULL
@@ -53017,7 +53231,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167738 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167738, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver System Test - MediaCapture - TestInfraredTorchControlMetadata fails for filtered Legacy Profile', 'Test checks for IRStream using MediaFrameSourceGroup without a profile set. This causes API to infer full range of MediaFrameSources. MediaCapture is initialized without a profile, which infers Legacy profile, where MediaFrameSources are then filtered out. This causes test to fail as it cannot find the original MediaFrameSource.', 'Test and OS updated so MediaFrameSourceGroup will infer a Legacy profile to match MediaCapture behavior. Errata issued', '2025-04-05T17:00:00')
+	VALUES(167738, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver System Test - MediaCapture - TestInfraredTorchControlMetadata fails for filtered Legacy Profile', 'Test checks for IRStream using MediaFrameSourceGroup without a profile set. This causes API to infer full range of MediaFrameSources. MediaCapture is initialized without a profile, which infers Legacy profile, where MediaFrameSources are then filtered out. This causes test to fail as it cannot find the original MediaFrameSource.', 'Test and OS updated so MediaFrameSourceGroup will infer a Legacy profile to match MediaCapture behavior. Errata issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53028,7 +53242,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 167741 v1.
 SET @TestCommandLineId = NULL
@@ -53100,7 +53314,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167884 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167884, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver System Test - MediaCapture - ValidateExposureCompensationValues fails due to IR camera', 'Test attempts Photo operation on an IR Camera. Pipeline fails to convert L8 to JPEG', 'Test updated, Errata issued', '2025-04-05T17:00:00')
+	VALUES(167884, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver System Test - MediaCapture - ValidateExposureCompensationValues fails due to IR camera', 'Test attempts Photo operation on an IR Camera. Pipeline fails to convert L8 to JPEG', 'Test updated, Errata issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53119,7 +53333,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 167926 v1.
 SET @TestCommandLineId = NULL
@@ -53208,7 +53422,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167927 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(167927, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'MediaCodec - Filter for VideoProcessor - Tone Mapper tests', 'AMD ToneMapper functionality does not fully align with the Win2024 requirement right now and Intel''s Tone Mapper implementation needs to match the standards set by Microsoft and are currently failing tests', 'AMD has requested a waiver for a 6-month period to correctly implement the ToneMapper as per MSFT guidelines', '2024-11-14T16:00:00')
+	VALUES(167927, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'MediaCodec - Filter for VideoProcessor - Tone Mapper tests', 'AMD ToneMapper functionality does not fully align with the Win2024 requirement right now and Intel''s Tone Mapper implementation needs to match the standards set by Microsoft and are currently failing tests', 'AMD has requested a waiver for a 6-month period to correctly implement the ToneMapper as per MSFT guidelines', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53225,7 +53439,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-11-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 168032 v1.
 SET @TestCommandLineId = NULL
@@ -53403,7 +53617,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 168217 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(168217, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Human Presence Proximity Test Failing on Non Human Presence based Proximity Sensors', 'Non human presence proximity sensors are enumerating for a human presence test', 'Test fixed to only enumerate human presence sensors', '2024-12-03T16:00:00')
+	VALUES(168217, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Human Presence Proximity Test Failing on Non Human Presence based Proximity Sensors', 'Non human presence proximity sensors are enumerating for a human presence test', 'Test fixed to only enumerate human presence sensors', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53428,7 +53642,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-03T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 168219 v2.
 SET @TestCommandLineId = NULL
@@ -53719,7 +53933,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 168478 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(168478, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[NdisStudio] NDIS keyword validation tests are listed under incorrect feature, causing failures for devices not advertising NDIS', '[NdisStudio] NDIS keyword validation tests are listed under incorrect feature, causing failures for devices not advertising NDIS', 'This is to be fixed in a future release of the HLK', '2025-04-24T17:00:00')
+	VALUES(168478, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[NdisStudio] NDIS keyword validation tests are listed under incorrect feature, causing failures for devices not advertising NDIS', '[NdisStudio] NDIS keyword validation tests are listed under incorrect feature, causing failures for devices not advertising NDIS', 'This is to be fixed in a future release of the HLK', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53765,7 +53979,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-24T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 168710 v1.
 SET @TestCommandLineId = NULL
@@ -53786,7 +54000,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 168710 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(168710, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Display Capture Tests failing for Indirect Display devices', 'An issue in the tests mean it is currently not possible to pass when connecting an Indirect Display device.', 'Apply the fix to the released HLK.', '2025-04-29T17:00:00')
+	VALUES(168710, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Display Capture Tests failing for Indirect Display devices', 'An issue in the tests mean it is currently not possible to pass when connecting an Indirect Display device.', 'Apply the fix to the released HLK.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53797,7 +54011,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-04-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 168780 v3.
 SET @TestCommandLineId = NULL
@@ -54358,7 +54572,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 170424 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(170424, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'CameraHLK - Camera Driver System Test - MediaCapture - Digital Window Metadata fails for combined IR RGB Sensor Group', 'Combined sensor group test streams from first preview stream, if this happens to be the IR Stream then Digital Window control will fail due to RGB preview not being active', 'Errata Issued, Test Fixed', '2026-04-05T17:00:00')
+	VALUES(170424, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'CameraHLK - Camera Driver System Test - MediaCapture - Digital Window Metadata fails for combined IR RGB Sensor Group', 'Combined sensor group test streams from first preview stream, if this happens to be the IR Stream then Digital Window control will fail due to RGB preview not being active', 'Errata Issued, Test Fixed', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -54385,7 +54599,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-04-05T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 170642 v1.
 SET @TestCommandLineId = NULL
@@ -54608,6 +54822,66 @@ BEGIN
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-12T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 171184 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash ndis.studio.oidrequesttest.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash ndis.studio.oidrequesttest.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 171184 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(171184, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: [NdisStudio] OidRequestTest - OID_GEN_XMIT_OK and OID_GEN_RCV_OK Verification test fail when link speed is less than 1Gbps', 'HLK Errata: [NdisStudio] OidRequestTest - OID_GEN_XMIT_OK and OID_GEN_RCV_OK Verification test fail when link speed is less than 1Gbps', 'This is an acceptable failure', '2025-01-14T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'NETWORK_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('NETWORK_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'NETWORK_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(NETWORK_BLOCK/NDIS/NetworkAdapter[contains(service,''dlcdcncm'') and number(linkspeed) < 1000000000])', @GathererTypeId)
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.26100"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN_XMIT_OK_OID_GEN_RCV_OK\#2', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest', 'AreEqual\(initValue, arrLongs\[1\]\): Buffer should not have been modified. - Values \(2882400018, 0\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'NdisStudioOidRequestTest::OidRequestTest::VerifyOIDRequest_OID_GEN_XMIT_OK_OID_GEN_RCV_OK\#5', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'EndTest', 'AreEqual\(initValue, arrLongs\[1\]\): Buffer should not have been modified. - Values \(2882400018, 0\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 171264 v3.
 SET @TestCommandLineId = NULL
@@ -55005,7 +55279,7 @@ BEGIN
 	VALUES(173718, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: NDISTest 6.5 - [2 Machine] - PM_PowerStateTransition & PM_WolMagicPacket &  PM_WolPattern test fail', 'NDISTest 6.5 - [2 Machine] - PM_PowerStateTransition
 NDISTest 6.5 - [2 Machine] - PM_WolMagicPacket
 NDISTest 6.5 - [2 Machine] - PM_WolPattern
-NDISTest 6.5 - [2 Machine] - PM_WakeOnLinkChange', 'This is an acceptable failure', '2024-10-30T17:00:00')
+NDISTest 6.5 - [2 Machine] - PM_WakeOnLinkChange', 'This is an acceptable failure', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -55049,7 +55323,7 @@ NDISTest 6.5 - [2 Machine] - PM_WakeOnLinkChange', 'This is an acceptable failur
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-10-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 173736 v1.
 SET @TestCommandLineId = NULL
@@ -55070,7 +55344,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 173736 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(173736, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Controls System Test - VIDEOSTABILIZATION - Iterate through possible settings while Preview fails with MEP due to Pin re-mapping', 'Camera Driver Controls System Test - VIDEOSTABILIZATION - Iterate through possible settings while Preview fails due to the MEP remapping the Record stream to the preview stream. The test enabled preview then attempts to toggle the Video stabilization control on the record stream, which is now already running. This is against the DDI, so the control fails and the test fails after (not knowing it is testing the wrong pin)', 'Errata issued, Test Updated', '2025-06-03T17:00:00')
+	VALUES(173736, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Controls System Test - VIDEOSTABILIZATION - Iterate through possible settings while Preview fails with MEP due to Pin re-mapping', 'Camera Driver Controls System Test - VIDEOSTABILIZATION - Iterate through possible settings while Preview fails due to the MEP remapping the Record stream to the preview stream. The test enabled preview then attempts to toggle the Video stabilization control on the record stream, which is now already running. This is against the DDI, so the control fails and the test fails after (not knowing it is testing the wrong pin)', 'Errata issued, Test Updated', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -55084,7 +55358,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-03T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 173868 v1.
 SET @TestCommandLineId = NULL
@@ -55265,7 +55539,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-14T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 174927 v1.
+-- Inserting filter 174927 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -55280,11 +55554,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 174927 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 174927 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(174927, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '24H2 Approved TPMs ', 'TPMs are expected to meet requirements for the 24H2 HLK kit.', 'Meet the published TPM device requirements for 24H2.', '2028-09-30T17:00:00')
+	VALUES(174927, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '24H2 Approved TPMs ', 'TPMs are expected to meet requirements for the 24H2 HLK kit.', 'Meet the published TPM device requirements for 24H2.', '2028-09-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -55297,6 +55571,10 @@ BEGIN
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
 	VALUES(@FilterId, 'Error', '!', 'INTC - 700\.20\.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'STM  - 9\.258\.*', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
@@ -55801,7 +56079,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 177219 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(177219, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver System Test - Mediacapture - TestEffectOptInCameraEnumeration does not check regkey value', 'TestEffectOptInCameraEnumeration reads a registry key that should indicate whether the camera has enabled MS Studio Effect and therefore needs MEP to be installed. The test incorrectly loads the key and checks that it exists, but not its value. This leads to the issue where some driver infs override their firmware by setting this value to 0, which is a valid strategy for disabling MEP without updating firmware. The test doesn''t look at the key value, and so fails the test when MEP is not installed.', 'Test was updated to read the key value. Warning:This does NOT allow a device to ship with MEP enabled for a camera when MEP is not installed and shipped on the system, and should not be considered a pass for those devices.', '2025-06-20T17:00:00')
+	VALUES(177219, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver System Test - Mediacapture - TestEffectOptInCameraEnumeration does not check regkey value', 'TestEffectOptInCameraEnumeration reads a registry key that should indicate whether the camera has enabled MS Studio Effect and therefore needs MEP to be installed. The test incorrectly loads the key and checks that it exists, but not its value. This leads to the issue where some driver infs override their firmware by setting this value to 0, which is a valid strategy for disabling MEP without updating firmware. The test doesn''t look at the key value, and so fails the test when MEP is not installed.', 'Test was updated to read the key value. Warning:This does NOT allow a device to ship with MEP enabled for a camera when MEP is not installed and shipped on the system, and should not be considered a pass for those devices.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -55812,7 +56090,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-20T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 177457 v1.
 SET @TestCommandLineId = NULL
@@ -55871,7 +56149,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 177825 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(177825, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'KS Topology Test Fails Custom Audio Modes', 'Due to a limitation in KS Topology test, custom audio modes are flagged as an error.', 'This erratum overturns the errors until the test is addressed.', '2025-06-27T17:00:00')
+	VALUES(177825, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'KS Topology Test Fails Custom Audio Modes', 'Due to a limitation in KS Topology test, custom audio modes are flagged as an error.', 'This erratum overturns the errors until the test is addressed.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -55890,7 +56168,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-27T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 178162 v2.
 SET @TestCommandLineId = NULL
@@ -56071,7 +56349,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 179949 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(179949, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Sensor Camera Driver Controls System Test fails due to pin remapping', 'Test checks for control on Photo Pin, but Photo pin is redirected to Preview Pin, causing test to fail', 'Test updated, Errata issued', '2025-07-07T17:00:00')
+	VALUES(179949, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Sensor Camera Driver Controls System Test fails due to pin remapping', 'Test checks for control on Photo Pin, but Photo pin is redirected to Preview Pin, causing test to fail', 'Test updated, Errata issued', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -56088,7 +56366,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-07-07T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 179955 v1.
 SET @TestCommandLineId = NULL
@@ -56383,7 +56661,7 @@ BEGIN
 
 RuleId: 0x210001, ErrorMessage: Registry operations should only use key handles returned from WDF or WDM APIs. Detected setting of value under unisolated registry key relative to RTL_REGISTRY_DEVICEMAP: SERIALCOMM, Module: c:\windows\system32\drivers\snxpsamd.sys, ModuleVersion: 10.2.5.0, ModuleProvider: SUNIX Co. Ltd., PublishedInf: oem36.inf, InfPath: C:\WINDOWS\System32\DriverStore\FileRepository\snxpcip.inf_amd64_7ab5c42713ed312a\snxpcip.inf, InfVersion: 06/28/2024 10.2.5.0, InfProvider: SUNIX Co., Ltd., Irql: 0
 
-This is an acceptable failure.', '2025-06-29T17:00:00')
+This is an acceptable failure.', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -56405,7 +56683,7 @@ This is an acceptable failure.', '2025-06-29T17:00:00')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 182098 v1.
 SET @TestCommandLineId = NULL
@@ -56991,7 +57269,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 188557 AND Version = 1
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(188557, 1, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'AutoTriage: HLK USB Secure Camera Controller Dual BDF Test - Compat test failure.', 'HLK USB Secure Camera Controller Dual BDF Test - Compat test failure.', 'Please contact CSS for obtaining a fixed test binary. ', '2024-11-29T16:00:00')
+	VALUES(188557, 1, 2, 1, 1, 1, 0, 0, @TestCommandLineId, 'AutoTriage: HLK USB Secure Camera Controller Dual BDF Test - Compat test failure.', 'HLK USB Secure Camera Controller Dual BDF Test - Compat test failure.', 'Please contact CSS for obtaining a fixed test binary. ', '2025-01-14T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -57024,7 +57302,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-11-29T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-01-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 188764 v1.
 SET @TestCommandLineId = NULL
@@ -57205,7 +57483,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-02-14T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 190397 v1.
+-- Inserting filter 190397 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -57220,11 +57498,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 190397 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 190397 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(190397, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Directed FX System Verification Test failed because ScFilter does not support DFX', 'HLK Errata: Directed FX System Verification Test failed because ScFilter does not support DFX', 'This is an acceptable failure', '2025-12-30T16:00:00')
+	VALUES(190397, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Directed FX System Verification Test failed because ScFilter does not support DFX', 'HLK Errata: Directed FX System Verification Test failed because ScFilter does not support DFX', 'This is an acceptable failure', '2025-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -57239,20 +57517,9 @@ BEGIN
 
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', 'Error', 'Device ''USB xHCI Compliant Host Controller.*'' failed because device ''*\\DRIVERENUM\\*'' does not support DFX.', 'UserText', 0, 0, @ParentLogNodeId)
-
-	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 2
-
-	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 2
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', 'Error', 'Device ''USB xHCI Compliant Host Controller.*'' failed because device ''*\\ScFilter\\*'' does not support DFX.', 'UserText', 0, 0, @ParentLogNodeId)
-
-	DELETE FROM @ParentNodes WHERE Depth >= 2
+	VALUES(@FilterId, 'Error', '!Msg', 'Device ''USB xHCI Compliant Host Controller \(.*\)'' failed because device ''\{.*\}\\ScFilter\\.*'' does not support DFX.', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
-
-	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
-	VALUES(@FilterId, 'StartTest', 'EndTest', 'DirectedFx::Taef::DirectedFxSystemTest::SystemVerificationTest', 'Title', 0, 0)
 
 	DELETE FROM @ParentNodes
 END
@@ -57302,7 +57569,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-09-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 191616 v3.
+-- Inserting filter 191616 v4.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -57317,11 +57584,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 191616 AND Version = 3
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 191616 AND Version = 4
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(191616, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Power Profile Provisioning Test failures', 'Power Profile Provisioning Test fail on Intel ADL/RPL', 'This is an acceptable failure.', '2026-09-29T17:00:00')
+	VALUES(191616, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Power Profile Provisioning Test failures', 'Power Profile Provisioning Test fail on Intel ADL/RPL', 'This is an acceptable failure.', '2026-09-29T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -57329,7 +57596,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'PROCESSOR_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('PROCESSOR_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'PROCESSOR_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//Caption[contains(.,''Intel64 Family 6 Model 151'') or contains(.,''Intel64 Family 6 Model 154'') or contains(.,''Intel64 Family 6 Model 183'') or contains(.,''Intel64 Family 6 Model 186'') or contains(.,''Intel64 Family 6 Model 191'')])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Caption[contains(.,''Intel64 Family 6 Model 151'') or contains(.,''Intel64 Family 6 Model 154'') or contains(.,''Intel64 Family 6 Model 183'') or contains(.,''Intel64 Family 6 Model 186'') or contains(.,''Intel64 Family 6 Model 191'') or contains(.,''Intel64 Family 6 Model 190'')])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.26100"]}')
@@ -57496,7 +57763,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-03-31T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 193545 v1.
+-- Inserting filter 193545 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -57511,25 +57778,119 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 193545 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 193545 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(193545, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[Camera] Msvproc.dll crash causes Camera Scenario tests to fail', 'msvproc.dll is crashing due to a IMFMediaType pointer release. ', 'Errata Issued, OS to fix call to msvproc.dll', '2025-10-31T17:00:00')
+	VALUES(193545, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '[Camera] Msvproc.dll crash causes Camera Scenario tests to fail', 'msvproc.dll is crashing due to a IMFMediaType pointer release. ', 'Errata Issued, OS to fix call to msvproc.dll', '2025-10-31T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
-	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.26100"]}')
-
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
 	VALUES(@FilterId, 'Error', 'Msg:UserText=Test completed', 'A crash with exception code 0xC0000005 occurred in module .msvproc.dll. in process .svchost.exe.FrameServer.*', 'UserText', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'EndTest:UserText=.*', 'A crash with exception code 0xC0000409 occurred in module .ucrtbase.dll. in process .svchost.exe.FrameServer.*', 'UserText', 0, 0)
 
 	DELETE FROM @ParentNodes
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-31T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 193938 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash directed-fx-taef-system.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash directed-fx-taef-system.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 193938 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(193938, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata - Directed DFX System Verification Test failed because volume.sys does not support DFX', 'HLK Errata - Directed DFX System Verification Test failed because volume.sys does not support DFX', 'This is an acceptable failure', '2024-12-30T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Ge Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', '!EndTest', 'DirectedFx::Taef::DirectedFxSystemTest::SystemVerificationTest', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!Msg', 'Device ''Standard SATA AHCI Controller \(.*\)'' failed because device ''STORAGE\\Volume\\\{.*\}#.*'' does not support DFX\.', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2024-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 193981 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '[[]WHCK\TAEFDeviceRoot]\te.exe /logfile:dv_events.wtl /enablewttlogging Driververifierconfiguration.dll%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('[[]WHCK\TAEFDeviceRoot]\te.exe /logfile:dv_events.wtl /enablewttlogging Driververifierconfiguration.dll%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 193981 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(193981, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Delayed enforcement for 2411 DrvIso enforcement bar tightening', 'The "DV - EnumerateEvents" post cleanup task will have unexpected errors around runtime accesses to the SYSTEM hive outside select registry paths.', 'These runtime accesses are WHCP violations that were not originally reported by the Driver Isolation checks in Driver Verifier. However, that reporting has been updated to detect those violations and this delayed enforcement errata provides a grace period to allow time to fix the new violations before they will fail certification results.', '2025-05-30T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Ge Full","Windows v10.0 Server x64 Ge Full","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Server ARM64 Ge Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Microsoft::Hardware::Kits::DriverVerifierConfigUtil::EnumerateEvents', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '\\registry\\machine\\system', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'RTL_REGISTRY_CONTROL', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'RTL_REGISTRY_SERVICES', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 
 -- Deprecating filter 6994 v1.
