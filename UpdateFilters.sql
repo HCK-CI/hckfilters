@@ -5288,7 +5288,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-06-01T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 5442 v12.
+-- Inserting filter 5442 v13.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -5303,11 +5303,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5442 AND Version = 12
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5442 AND Version = 13
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(5442, 12, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK: NDIS 6.0 Tests fail with LibProtocolDriver: Install protocol driver failed.', 'The following HLK NDIS 6.0 Tests may fail with "LibProtocolDriver: Install protocol driver failed.":
+	VALUES(5442, 13, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK: NDIS 6.0 Tests fail with LibProtocolDriver: Install protocol driver failed.', 'The following HLK NDIS 6.0 Tests may fail with "LibProtocolDriver: Install protocol driver failed.":
 
 NDISTest 6.0 - [1 Machine] - 1c_64BitOIDs
 NDISTest 6.0 - [1 Machine] - 1c_Mini6PerfSend
@@ -5325,7 +5325,7 @@ NDISTest 6.0 - [2 Machine] - 2c_Mini6Performance
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v6.3 Client x86","Windows v6.3 Client x64","Windows v6.3 Server x64","Windows v10.0 Client x86","Windows v10.0 Client x64","Windows v10.0 Server x64","Windows v10.0 Client x86 TH1 Full","Windows v10.0 Client x64 TH1 Full","Windows v10.0 Server x64 TH1 Full","Windows v10.0 Client x86 TH2 Full","Windows v10.0 Client x64 TH2 Full","Windows v10.0 Server x64 TH2 Full","Windows v10.0 Client x86 RS1 Full","Windows v10.0 Client x64 RS1 Full","Windows v10.0 Server x64 RS1 Full","Windows v10.0 Client x86 RS2 Full","Windows v10.0 Client x64 RS2 Full","Windows v10.0 Client x86 RS3 Full","Windows v10.0 Client x64 RS3 Full","Windows v10.0 Client x86 RS4 Full","Windows v10.0 Client x64 RS4 Full","Windows v10.0 Client x86 RS5 Full","Windows v10.0 Client x64 RS5 Full","Windows v10.0 Server x64 RS5 Full","Windows v10.0 Client x86 19H1 Full","Windows v10.0 Client x64 19H1 Full","Windows v10.0 Client x86 Vb Full","Windows v10.0 Client x64 Vb Full","Windows v10.0 Client x86 Mn Full","Windows v10.0 Client x64 Mn Full","Windows v10.0 Server x64 Fe Full","Windows v10.0 Client x86 Co Full","Windows v10.0 Client x64 Co Full","Windows v10.0 Client x86 Ni Full","Windows v10.0 Client x64 Ni Full"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v6.3 Client x86","Windows v6.3 Client x64","Windows v6.3 Server x64","Windows v10.0 Client x86","Windows v10.0 Client x64","Windows v10.0 Server x64","Windows v10.0 Client x86 TH1 Full","Windows v10.0 Client x64 TH1 Full","Windows v10.0 Server x64 TH1 Full","Windows v10.0 Client x86 TH2 Full","Windows v10.0 Client x64 TH2 Full","Windows v10.0 Server x64 TH2 Full","Windows v10.0 Client x86 RS1 Full","Windows v10.0 Client x64 RS1 Full","Windows v10.0 Server x64 RS1 Full","Windows v10.0 Client x86 RS2 Full","Windows v10.0 Client x64 RS2 Full","Windows v10.0 Client x86 RS3 Full","Windows v10.0 Client x64 RS3 Full","Windows v10.0 Client x86 RS4 Full","Windows v10.0 Client x64 RS4 Full","Windows v10.0 Client x86 RS5 Full","Windows v10.0 Client x64 RS5 Full","Windows v10.0 Server x64 RS5 Full","Windows v10.0 Client x86 19H1 Full","Windows v10.0 Client x64 19H1 Full","Windows v10.0 Client x86 Vb Full","Windows v10.0 Client x64 Vb Full","Windows v10.0 Client x86 Mn Full","Windows v10.0 Client x64 Mn Full","Windows v10.0 Server x64 Fe Full","Windows v10.0 Client x86 Co Full","Windows v10.0 Client x64 Co Full","Windows v10.0 Client x86 Ni Full","Windows v10.0 Client x64 Ni Full","Windows v10.0 Client x86 Ge Full","Windows v10.0 Client x64 Ge Full","Windows v10.0 Server x64 Ge Full"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
