@@ -26624,7 +26624,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-09-19T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 42615 v10.
+-- Inserting filter 42615 v9.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -26639,19 +26639,19 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 42615 AND Version = 10
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 42615 AND Version = 9
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(42615, 10, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: NDISTest 6.5 - [1 Machine] - StandardizedKeywords failed - *RSCIPv NDI\Params\Default is not "1"', 'This is a test bug', 'This is an acceptable failure', '2030-03-31T17:00:00')
+	VALUES(42615, 9, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: NDISTest 6.5 - [1 Machine] - StandardizedKeywords failed - *RSCIPv NDI\Params\Default is not "1"', 'This is a test bug', 'This is an acceptable failure', '2030-03-31T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,"MLX4\ConnectX-3") or contains(.,"PCI\VEN_14E4&DEV_1614") or contains(.,"PCI\VEN_14E4&DEV_16C9") or contains(.,"PCI\VEN_14E4&DEV_16CA") or contains(.,"PCI\VEN_14E4&DEV_16CE") or contains(.,"PCI\VEN_14E4&DEV_16CF") or contains(.,"PCI\VEN_14E4&DEV_16E0") or contains(.,"PCI\VEN_14E4&DEV_16E4") or contains(.,"PCI\VEN_14E4&DEV_16D0") or contains(.,"PCI\VEN_14E4&DEV_16D1") or contains(.,"PCI\VEN_14E4&DEV_16D2") or contains(.,"PCI\VEN_14E4&DEV_16D5") or contains(.,"PCI\VEN_14E4&DEV_16D6") or contains(.,"PCI\VEN_14E4&DEV_16D7") or contains(.,"PCI\VEN_14E4&DEV_16D8") or contains(.,"PCI\VEN_14E4&DEV_16D9") or contains(.,"PCI\VEN_14E4&DEV_16DF") or contains(.,"PCI\VEN_14E4&DEV_16E2") or contains(.,"PCI\VEN_14E4&DEV_16E3") or contains(.,"PCI\VEN_14E4&DEV_16E9") or contains(.,"PCI\VEN_14E4&DEV_16F1") or contains(.,"PCI\VEN_14E4&DEV_1614") or contains(.,"PCI\VEN_14E4&DEV_1750") or contains(.,"PCI\VEN_14E4&DEV_1751") or contains(.,"PCI\VEN_14e4&DEV_1752") or contains(.,"PCI\VEN_14E4&DEV_16D7")or contains(.,"PCI\VEN_14E4&DEV_1760")]) ')
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,"MLX4\ConnectX-3") or contains(.,"PCI\VEN_14E4&DEV_1614") or contains(.,"PCI\VEN_14E4&DEV_16C9") or contains(.,"PCI\VEN_14E4&DEV_16CA") or contains(.,"PCI\VEN_14E4&DEV_16CE") or contains(.,"PCI\VEN_14E4&DEV_16CF") or contains(.,"PCI\VEN_14E4&DEV_16E0") or contains(.,"PCI\VEN_14E4&DEV_16E4") or contains(.,"PCI\VEN_14E4&DEV_16D0") or contains(.,"PCI\VEN_14E4&DEV_16D1") or contains(.,"PCI\VEN_14E4&DEV_16D2") or contains(.,"PCI\VEN_14E4&DEV_16D5") or contains(.,"PCI\VEN_14E4&DEV_16D6") or contains(.,"PCI\VEN_14E4&DEV_16D7") or contains(.,"PCI\VEN_14E4&DEV_16D8") or contains(.,"PCI\VEN_14E4&DEV_16D9") or contains(.,"PCI\VEN_14E4&DEV_16DF") or contains(.,"PCI\VEN_14E4&DEV_16E2") or contains(.,"PCI\VEN_14E4&DEV_16E3") or contains(.,"PCI\VEN_14E4&DEV_16E9") or contains(.,"PCI\VEN_14E4&DEV_16F1") or contains(.,"PCI\VEN_14E4&DEV_1614") or contains(.,"PCI\VEN_14E4&DEV_1750") or contains(.,"PCI\VEN_14E4&DEV_1751") or contains(.,"PCI\VEN_14e4&DEV_1752") or contains(.,"PCI\VEN_14E4&DEV_16D7")]) ')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.17763","10.1.19041","10.1.22000","10.1.22621","10.1.26100"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.17763","10.1.19041","10.1.22000","10.1.22621"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -54819,7 +54819,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-03-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 170184 v3.
+-- Inserting filter 170184 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -54834,11 +54834,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 170184 AND Version = 3
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 170184 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(170184, 3, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'USB4 Systems to have Support For All Type-C connectors', 'Starting 2025, all Type-C ports on USB4-capable, non-desktop form factor systems must support USB4.', 'Please contact sausb@microsoft.com for partners who are failing this HLK test so that the USB team can have a discussion with partners.', '2025-12-30T16:00:00')
+	VALUES(170184, 2, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'USB4 Systems to have Support For All Type-C connectors', 'Starting 2025, all Type-C ports on USB4-capable, non-desktop form factor systems must support USB4.', 'Please contact sausb@microsoft.com for partners who are failing this HLK test so that the USB team can have a discussion with partners.', '2025-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -54846,7 +54846,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'CLIENTMACHINE_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('CLIENTMACHINE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'CLIENTMACHINE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//smbiosModel[contains(.,"HP ZBook Studio 16 inch G10 Mobile Workstation PC") or contains(.,"HP ZBook Studio 16 inch G11 Mobile Workstation PC") or contains(.,"HP Pavilion Plus Laptop 16-ab") or contains(.,"HP Envy x360 2-in-1 Laptop 14-fc0") or contains(.,"HP Envy x360 2-in-1 Laptop 16-ac") or contains(.,"HP Envy Laptop 17-da") or contains(.,"HP OmniBook X Laptop 14-fe1") or contains(.,"HP EliteBook Ultra G1q8 14 inch Notebook AI PC")or contains(.,"HP EliteBook X G1a 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook X Flip G1i 14 inch Notebook Next Gen AI PC")])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//smbiosModel[contains(.,"HP ZBook Studio 16 inch G10 Mobile Workstation PC") or contains(.,"HP ZBook Studio 16 inch G11 Mobile Workstation PC") or contains(.,"HP Pavilion Plus Laptop 16-ab") or contains(.,"HP Envy x360 2-in-1 Laptop 14-fc0") or contains(.,"HP Envy x360 2-in-1 Laptop 16-ac") or contains(.,"HP Envy Laptop 17-da") or contains(.,"HP OmniBook X Laptop 14-fe1") or contains(.,"HP EliteBook Ultra G1q8 14 inch Notebook AI PC")or contains(.,"HP EliteBook X G1a 14 inch Notebook Next Gen AI PC")])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.26100"]}')
