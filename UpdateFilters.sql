@@ -3855,7 +3855,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2028-10-02T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 5874 v17.
+-- Inserting filter 5874 v18.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -3870,18 +3870,18 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5874 AND Version = 17
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 5874 AND Version = 18
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(5874, 17, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'ERRATA :  40Gig Ethernet Adapters may fail to achieve the minimum satisfactory total link utilization as NDIS Test is not able to generate enough traffic.', 'Network adapters with link speeds of 40Gig or higher may fail NDIS QoS tests because NDIS test is not able to generate enough traffic for the NICs to utilize their bandwidth.
+	VALUES(5874, 18, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'ERRATA :  40Gig Ethernet Adapters may fail to achieve the minimum satisfactory total link utilization as NDIS Test is not able to generate enough traffic.', 'Network adapters with link speeds of 40Gig or higher may fail NDIS QoS tests because NDIS test is not able to generate enough traffic for the NICs to utilize their bandwidth.
 ', 'This is an acceptable failure.', '2030-06-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 1, 'boolean(//Devnode/DeviceID[contains(.,"
-PCI\VEN_8086&DEV_1580") or contains(.,"PCI\VEN_8086&DEV_1583") or contains(.,"PCI\VEN_8086&DEV_1584") or contains(.,"PCI\VEN_8086&DEV_1587") or contains(.,"PCI\VEN_8086&DEV_1588") or contains(.,"PCI\VEN_8086&DEV_1592") or contains(.,"PCI\VEN_8086&DEV_1593") or contains(.,"PCI\VEN_8086&DEV_158A") or contains(.,"PCI\VEN_14E4&DEV_1614") or contains(.,"PCI\VEN_14e4&DEV_16f0") or contains(.,"PCI\VEN_14e4&DEV_16f1") or contains(.,"PCI\VEN_14e4&DEV_d802") or contains(.,"PCI\VEN_14e4&DEV_d804") or contains(.,"PCI\VEN_14e4&DEV_d81") or contains(.,"PCI\VEN_15B3&DEV_1015") or contains(.,"PCI\VEN_14E4&DEV_175") or contains(.,"MLX4\CONNECTX-3PRO_ETH") or contains(.,"PCI\VEN_15B3&DEV_101B") or contains(.,"PCI\VEN_15B3&DEV_1017") or contains(.,"PCI\VEN_8086&DEV_124C") or contains(.,"PCI\VEN_8086&DEV_124E") or contains(.,"PCI\VEN_8086&DEV_124F") or contains(.,"PCI\VEN_8086&DEV_151D") or contains(.,"PCI\VEN_8086&DEV_124D") or contains(.,"PCI\VEN_8086&DEV_1599") or contains(.,"PCI\VEN_8086&DEV_188A") or contains(.,"PCI\VEN_8086&DEV_188B") or contains(.,"PCI\VEN_8086&DEV_188C") or contains(.,"PCI\VEN_8086&DEV_188D") or contains(.,"PCI\VEN_8086&DEV_188E") or contains(.,"PCI\VEN_14E4&DEV_16D7") or contains(.,"PCI\VEN_15B3&DEV_101D")])
+PCI\VEN_8086&DEV_1580") or contains(.,"PCI\VEN_8086&DEV_1583") or contains(.,"PCI\VEN_8086&DEV_1584") or contains(.,"PCI\VEN_8086&DEV_1587") or contains(.,"PCI\VEN_8086&DEV_1588") or contains(.,"PCI\VEN_8086&DEV_1592") or contains(.,"PCI\VEN_8086&DEV_1593") or contains(.,"PCI\VEN_8086&DEV_158A") or contains(.,"PCI\VEN_14E4&DEV_1614") or contains(.,"PCI\VEN_14e4&DEV_16f0") or contains(.,"PCI\VEN_14e4&DEV_16f1") or contains(.,"PCI\VEN_14e4&DEV_d802") or contains(.,"PCI\VEN_14e4&DEV_d804") or contains(.,"PCI\VEN_14e4&DEV_d81") or contains(.,"PCI\VEN_15B3&DEV_1015") or contains(.,"PCI\VEN_14E4&DEV_175") or contains(.,"MLX4\CONNECTX-3PRO_ETH") or contains(.,"PCI\VEN_15B3&DEV_101B") or contains(.,"PCI\VEN_15B3&DEV_1017") or contains(.,"PCI\VEN_8086&DEV_124C") or contains(.,"PCI\VEN_8086&DEV_124E") or contains(.,"PCI\VEN_8086&DEV_124F") or contains(.,"PCI\VEN_8086&DEV_151D") or contains(.,"PCI\VEN_8086&DEV_124D") or contains(.,"PCI\VEN_8086&DEV_1599") or contains(.,"PCI\VEN_8086&DEV_188A") or contains(.,"PCI\VEN_8086&DEV_188B") or contains(.,"PCI\VEN_8086&DEV_188C") or contains(.,"PCI\VEN_8086&DEV_188D") or contains(.,"PCI\VEN_8086&DEV_188E") or contains(.,"PCI\VEN_14E4&DEV_16D7") or contains(.,"PCI\VEN_15B3&DEV_101D") or contains(.,"PCI\VEN_8086&DEV_12D1") or contains(.,"PCI\VEN_8086&DEV_12D2") or contains(.,"PCI\VEN_8086&DEV_12D3") or contains(.,"PCI\VEN_8086&DEV_12D5") or contains(.,"PCI\VEN_8086&DEV_12D8") or contains(.,"PCI\VEN_8086&DEV_12DA") or contains(.,"PCI\VEN_8086&DEV_12DC") or contains(.,"PCI\VEN_8086&DEV_12DD") or contains(.,"PCI\VEN_8086&DEV_12DE") or contains(.,"PCI\VEN_8086&DEV_579C") or contains(.,"PCI\VEN_8086&DEV_579D") or contains(.,"PCI\VEN_8086&DEV_579E") or contains(.,"PCI\VEN_8086&DEV_579F")])
 ')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
@@ -10726,7 +10726,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-06-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 10746 v9.
+-- Inserting filter 10746 v10.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -10741,16 +10741,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 10746 AND Version = 9
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 10746 AND Version = 10
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(10746, 9, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: DF - *: Disk Data Plugin reporting MPIO/SCSI Disk doesnt have volume', 'DF tests not able to see disk volumes on Windows Server 2016/2019/2022 builds', 'The disk data plug-in for WDTF does not recognize that there is a volume on the NetApp MPIO SCSI disks', '2025-05-30T17:00:00')
+	VALUES(10746, 10, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Errata Waiver: DF - *: Disk Data Plugin reporting MPIO/SCSI Disk doesnt have volume', 'DF tests not able to see disk volumes on Windows Server 2016/2019/2022 builds', 'The disk data plug-in for WDTF does not recognize that there is a volume on the NetApp MPIO SCSI disks', '2025-05-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Server x64 RS1 Full","Windows v10.0 Server x64 RS5 Full","Windows v10.0 Server x64 Fe Full","Windows v10.0 Server x64 Ni Full","Windows v10.0 Server x64 Ge Full"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Server x64 RS1 Full","Windows v10.0 Server x64 RS5 Full","Windows v10.0 Server x64 Fe Full","Windows v10.0 Server x64 Ni Full"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -13163,7 +13163,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 20086 v70.
+-- Inserting filter 20086 v71.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -13178,11 +13178,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 20086 AND Version = 70
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 20086 AND Version = 71
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(20086, 70, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'TPM EK Certificate Tests Verify Known Authority', 'EK Certificates needs to have an authority that Microsoft is aware of.', 'Make Microsoft aware of the authority identifier', '2030-07-01T07:00:00')
+	VALUES(20086, 71, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'TPM EK Certificate Tests Verify Known Authority', 'EK Certificates needs to have an authority that Microsoft is aware of.', 'Make Microsoft aware of the authority identifier', '2030-07-01T07:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -14923,6 +14923,10 @@ BEGIN
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
 	VALUES(@FilterId, 'Error', '!', 'e0 ab 72 bc 96 3e ff b8 66 9b 7d 10 5a 43 3e 5c 42 54 87 5f', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'ee f9 dc e5 74 c5 31 72 c3 bd 60 87 c1 0f 1c f1 2b 8c 39 10', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
@@ -43911,7 +43915,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 105154 v3.
+-- Inserting filter 105154 v4.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -43926,16 +43930,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 105154 AND Version = 3
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 105154 AND Version = 4
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(105154, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Controls System Test - FaceDetection Default is invalid when using Platform Device MFT', 'Platform Device MFT implements the FaceDetection control internal to MSFT, and it''s default value is incorrect. This is penalizing drivers that opt in to Platform Device MFT', 'Errata Issued, Platform Device MFT implementation updated', '2025-06-02T17:00:00')
+	VALUES(105154, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Camera Driver Controls System Test - FaceDetection Default is invalid when using Platform Device MFT', 'Platform Device MFT implements the FaceDetection control internal to MSFT, and it''s default value is incorrect. This is penalizing drivers that opt in to Platform Device MFT', 'Errata Issued, Platform Device MFT implementation updated', '2025-09-29T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621","10.1.26100"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -43947,7 +43951,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-02T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-09-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 105812 v5.
 SET @TestCommandLineId = NULL
@@ -46125,7 +46129,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-14T09:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 129922 v2.
+-- Inserting filter 129922 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -46140,16 +46144,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 129922 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 129922 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(129922, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Validation of CPV2 for Face Auth profile fails for MEP', 'Camera Driver System Test - Validate CPV2 for Face Auth Profile on MEP opted in camera due to MEP generating the profiles', 'Test fixed, Errata Issued', '2026-10-14T09:00:00')
+	VALUES(129922, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Validation of CPV2 for Face Auth profile fails for MEP', 'Camera Driver System Test - Validate CPV2 for Face Auth Profile on MEP opted in camera due to MEP generating the profiles', 'Test fixed, Errata Issued', '2026-10-14T09:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621"]}')
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.22621","10.1.26100"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -52882,7 +52886,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 174927 v6.
+-- Inserting filter 174927 v7.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -52897,11 +52901,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 174927 AND Version = 6
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 174927 AND Version = 7
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(174927, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '24H2 Approved TPMs ', 'TPMs are expected to meet requirements for the 24H2 HLK kit.', 'Meet the published TPM device requirements for 24H2.', '2025-05-30T17:00:00')
+	VALUES(174927, 7, 1, 1, 1, 1, 0, 0, @TestCommandLineId, '24H2 Approved TPMs ', 'TPMs are expected to meet requirements for the 24H2 HLK kit.', 'Meet the published TPM device requirements for 24H2.', '2025-05-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -52946,6 +52950,14 @@ BEGIN
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
 	VALUES(@FilterId, 'Error', '!', 'NSG - 30\.30\.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'NTC - 7\.2\.3\.1', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'NTC - 7\.2\.4\.0', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
