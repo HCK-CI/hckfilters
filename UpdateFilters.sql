@@ -55907,7 +55907,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 200656 v2.
+-- Inserting filter 200656 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -55922,16 +55922,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 200656 AND Version = 2
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 200656 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(200656, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Windows Server 2008 and later Server Core issues', 'The Operate in Server Core Test does not apply to all device categories. ', 'This filter will overturn failures for devices in specific categories.', '2025-05-30T17:00:00')
+	VALUES(200656, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Windows Server 2008 and later Server Core issues', 'The Operate in Server Core Test does not apply to all device categories. ', 'This filter will overturn failures for devices in specific categories.', '2025-05-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''AMD-OpenCL User Mode Driver'') or contains(.,''AMD-Windows Support Components'') or contains(.,''AMD Radeon RX 6900 XT'')])')
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''AMD'')])')
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"FeatureID","MatchType":1,"Values":["Device.Graphics.AdapterBase","Device.Streaming.HMFT","Device.Imaging.Printer","Device.Display.Monitor","Device.Streaming.Camera.Base","Device.Audio.Base","Device.Audio.APO","Device.Input.PrecisionTouchpad","Device.Input.Digitizer.PrecisionTouchpad","Device.Imaging.Scanner.Base","Device.Media.DMR.Audio","Device.Portable.MobilePhone","Device.Portable.DigitalCamera","Device.Portable.Core","Device.Input.SmartCardMiniDriver","Device.Connectivity.WSD","Device.Streaming.D3D11","Device.Devfund.Server"]}')
