@@ -52157,7 +52157,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 189915 v1.
+-- Inserting filter 189915 v3.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -52172,11 +52172,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 189915 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 189915 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(189915, 1, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'Contingency: USB4 Systems to have Support For All Type-C connectors', 'Starting 2025, all Type-C ports on USB4-capable, non-desktop form factor systems must support USB4.', 'Please contact sausb@microsoft.com for partners who are failing this HLK test so that the USB team can have a discussion with partners.', '2025-12-30T16:00:00')
+	VALUES(189915, 3, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'Contingency: USB4 Systems to have Support For All Type-C connectors', 'Starting 2025, all Type-C ports on USB4-capable, non-desktop form factor systems must support USB4.', 'Please contact sausb@microsoft.com for partners who are failing this HLK test so that the USB team can have a discussion with partners.', '2025-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -52184,7 +52184,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'CLIENTMACHINE_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('CLIENTMACHINE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'CLIENTMACHINE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//smbiosModel[contains(.,"H7606WI") or contains(.,"H7606WV") or contains(.,"H7606WU") ])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//smbiosModel[contains(.,"H7606WI") or contains(.,"H7606WV") or contains(.,"H7606WU") or contains(.,"H7606WP") or contains(.,"H7606WM") or contains(.,"H7606WR") or contains(.,"H7606WW") or contains(.,"H7606WX") or contains(.,"RC73XA") ])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.26100"]}')
@@ -54603,6 +54603,55 @@ BEGIN
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
 	VALUES(@FilterId, 'Error', '!Error', 'Code 1331(.*)ACSettingIndex'' differently between sections', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 216882 v2.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash virtualmachinerenderbvt.dll /name:VirtualMachineRender::RenderOpenCL_VM%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash virtualmachinerenderbvt.dll /name:VirtualMachineRender::RenderOpenCL_VM%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 216882 AND Version = 2
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(216882, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WDDM2.7 - NonDX Paravirtualization - OpenCL VM fails QueryStatistics call on a device that does not support OpenCL', 'WDDM2.7 - NonDX Paravirtualization - OpenCL VM fails QueryStatistics call on a device that does not support OpenCL', 'This is an acceptable failure', '2025-12-30T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DISPLAY_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//GraphicsInfo[starts-with(@HostGpuHardwareId,''PCI\VEN_1002&DEV_163F'')])', @GathererTypeId)
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.26100"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'VirtualMachineRender::RenderOpenCL_VM', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'End', 'AreEqual\(CL_SUCCESS, cl.GetDeviceIDs\(platform, CL_DEVICE_TYPE_GPU, 1, &device, &devices\)\)', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
