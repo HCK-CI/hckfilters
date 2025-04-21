@@ -36308,7 +36308,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 82567 v8.
+-- Inserting filter 82567 v9.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -36323,11 +36323,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 82567 AND Version = 8
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 82567 AND Version = 9
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(82567, 8, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: NDISTest 6.0 - [1 Machine] - , Supported list does not contain required Oid', 'HLK Errata: NDISTest 6.0 - [1 Machine] - 1c_IOCTLCoverage test for NetAdapterCx driver, Supported list does not contain required Oid', 'This is an acceptable failure', '2030-12-30T16:00:00')
+	VALUES(82567, 9, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: NDISTest 6.0 - [1 Machine] - , Supported list does not contain required Oid', 'HLK Errata: NDISTest 6.0 - [1 Machine] - 1c_IOCTLCoverage test for NetAdapterCx driver, Supported list does not contain required Oid', 'This is an acceptable failure', '2030-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -36373,7 +36373,8 @@ contains(.,''PCI\VEN_8086&DEV_57B6'') or
 contains(.,''PCI\VEN_8086&DEV_57B7'') or
 contains(.,''PCI\VEN_8086&DEV_57B8'') or
 contains(.,''PCI\VEN_8086&DEV_57B9'') or
-contains(.,''PCI\VEN_8086&DEV_57BA'')
+contains(.,''PCI\VEN_8086&DEV_57BA'') or
+contains(.,''PCI\VEN_14C3&DEV_8811'')
 ])')
 
 -- Inserting filter log nodes
@@ -36692,7 +36693,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 82771 v8.
+-- Inserting filter 82771 v9.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -36707,11 +36708,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 82771 AND Version = 8
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 82771 AND Version = 9
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(82771, 8, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: NDISTest 6.0 - [1 Machine] - 2c_OidsNdisRequest', 'HLK Errata: NDISTest 6.0 - [1 Machine] - 1c_IOCTLCoverage test for NetAdapterCx driver, Supported list does not contain required Oid', 'This is an acceptable failure', '2030-12-30T16:00:00')
+	VALUES(82771, 9, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: NDISTest 6.0 - [1 Machine] - 2c_OidsNdisRequest', 'HLK Errata: NDISTest 6.0 - [1 Machine] - 1c_IOCTLCoverage test for NetAdapterCx driver, Supported list does not contain required Oid', 'This is an acceptable failure', '2030-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -36757,7 +36758,8 @@ contains(.,''PCI\VEN_8086&DEV_57B6'') or
 contains(.,''PCI\VEN_8086&DEV_57B7'') or
 contains(.,''PCI\VEN_8086&DEV_57B8'') or
 contains(.,''PCI\VEN_8086&DEV_57B9'') or
-contains(.,''PCI\VEN_8086&DEV_57BA'')
+contains(.,''PCI\VEN_8086&DEV_57BA'')  or
+contains(.,''PCI\VEN_14C3&DEV_8811'')
 ])')
 
 -- Inserting filter log nodes
@@ -47039,7 +47041,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 163077 AND Version = 3
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(163077, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Lullaby2''s asynchronous test fails on Windows 24H2 due to policy changes for Modern Standby', 'Due to policy changes in Modern Standby, Lullaby2 asynchronous testing is expected to fail with error code 0x84450015.', 'This erratum will cover the issue until the test is reviewed.', '2025-05-30T17:00:00')
+	VALUES(163077, 3, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Lullaby2''s asynchronous test fails on Windows 24H2 due to policy changes for Modern Standby', 'Due to policy changes in Modern Standby, Lullaby2 asynchronous testing is expected to fail with error code 0x84450015.', 'This erratum will cover the issue until the test is reviewed.', '2025-08-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -47069,7 +47071,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-08-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 163261 v1.
 SET @TestCommandLineId = NULL
@@ -49707,7 +49709,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-05-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 170184 v10.
+-- Inserting filter 170184 v11.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -49722,11 +49724,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 170184 AND Version = 10
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 170184 AND Version = 11
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(170184, 10, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'USB4 Systems to have Support For All Type-C connectors', 'Starting 2025, all Type-C ports on USB4-capable, non-desktop form factor systems must support USB4.', 'Please contact sausb@microsoft.com for partners who are failing this HLK test so that the USB team can have a discussion with partners.', '2025-12-30T16:00:00')
+	VALUES(170184, 11, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'USB4 Systems to have Support For All Type-C connectors', 'Starting 2025, all Type-C ports on USB4-capable, non-desktop form factor systems must support USB4.', 'Please contact sausb@microsoft.com for partners who are failing this HLK test so that the USB team can have a discussion with partners.', '2025-12-30T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -49734,7 +49736,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'CLIENTMACHINE_BLOCK')
 		INSERT INTO GathererType([Name]) VALUES ('CLIENTMACHINE_BLOCK')
 	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'CLIENTMACHINE_BLOCK'
 	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
-	VALUES(@FilterId, 2, 'boolean(//smbiosModel[contains(.,"HP EliteBook 8 G1i 13 inch Notebook AI PC") or contains(.,"HP EliteBook 8 Flip G1i 13 inch Notebook AI PC") or contains(.,"HP EliteBook 8 G1i 14 inch Notebook AI PC") or contains(.,"HP EliteBook 8 G1i 16 inch Notebook AI PC") or contains(.,"HP ZBook 8 G1i 14 inch Mobile Workstation PC") or contains(.,"HP ZBook 8 G1i 16 inch Mobile Workstation PC") or contains(.,"HP EliteBook 8 G1i 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook 8 G1i 16 inch Notebook Next Gen AI PC") or contains(.,"HP ZBook Studio 16 inch G10 Mobile Workstation PC") or contains(.,"HP ZBook Studio 16 inch G11 Mobile Workstation PC") or contains(.,"HP Pavilion Plus Laptop 16-ab") or contains(.,"HP Envy x360 2-in-1 Laptop 14-fc0") or contains(.,"HP Envy x360 2-in-1 Laptop 16-ac") or contains(.,"HP Envy Laptop 17-da") or contains(.,"HP OmniBook X Laptop 14-fe1") or contains(.,"HP EliteBook Ultra G1q8 14 inch Notebook AI PC")or contains(.,"HP EliteBook X G1a 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook X Flip G1i 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook X G1i 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook 8 G1a") or contains(.,"HP ZBook 8 G1a")  or contains(.,"HP ZBook Ultra G1a") or contains(.,"HP OmniBook X Flip Laptop 14-fm") or contains(.,"HP OmniBook X Flip Laptop 14-fk") or contains(.,"HP OmniBook 7 Laptop 17-dc") or contains(.,"HP OmniBook X Laptop 17-dd") or contains(.,"HP OmniBook 7 Flip Laptop 16-au") or contains(.,"HP OmniBook X Flip Laptop 16-as") or contains(.,"HP OmniBook X Flip Laptop 16-ar") or contains(.,"HP OmniBook 7 Laptop 14-fr") or contains(.,"HP OmniBook 7 Laptop 14-fs")or contains(.,"HP OmniBook 7 Laptop 16-ay") or contains(.,"HP OmniBook 7 Laptop 16-az") or contains(.,"HP OmniBook 7 LaptopNGAI 16-bh") or contains(.,"HP OmniBook X Laptop 16-aw") or contains(.,"HP OmniBook X Flip Laptop 16-be")or contains(.,"HP ZBook Firefly 14 inch G12 Mobile Workstation PC") or contains(.,"HP ZBook Firefly 16 inch G12 Mobile Workstation PC") or contains(.,"HP EliteBook 8 G1i 14  Notebook AI PC") or contains(.,"HP EliteBook 8 G1i 14 inch Next Gen AI PC") or contains(.,"HP EliteBook 8 G1i 16 inch Next Gen AI PC") or contains(.,"HP EliteBook 8 G1i 16  Notebook AI PC") or contains(.,"HP EliteBook 8 G1a 14 inch Notebook Next Gen AI PC ") or contains(.,"HP EliteBook 8 G1a 16 inch Notebook Next Gen AI PC ") or contains(.,"HP EliteBook 8 G1a 14 inch Notebook AI PC") or contains(.,"HP EliteBook 8 G1a 16 inch Notebook AI PC") or contains(.,"HP ZBook 8 G1ah 14 inch Mobile Workstation PC ") or contains(.,"HP ZBook 8 G1ak 14 inch Mobile Workstation PC ") or contains(.,"HP ZBook 8 G1as 14 inch Mobile Workstation PC ") or contains(.,"HP EliteBook 1045 G1a 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook 1045 G1a 14 inch Notebook Next Gen AI PC") or contains(.,"HP ZBook Ultra 14 G1a Mobile Workstation PC")])', @GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//smbiosModel[contains(.,"HP EliteBook 8 G1i 13 inch Notebook AI PC") or contains(.,"HP EliteBook 8 Flip G1i 13 inch Notebook AI PC") or contains(.,"HP EliteBook 8 G1i 14 inch Notebook AI PC") or contains(.,"HP EliteBook 8 G1i 16 inch Notebook AI PC") or contains(.,"HP ZBook 8 G1i 14 inch Mobile Workstation PC") or contains(.,"HP ZBook 8 G1i 16 inch Mobile Workstation PC") or contains(.,"HP EliteBook 8 G1i 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook 8 G1i 16 inch Notebook Next Gen AI PC") or contains(.,"HP ZBook Studio 16 inch G10 Mobile Workstation PC") or contains(.,"HP ZBook Studio 16 inch G11 Mobile Workstation PC") or contains(.,"HP Pavilion Plus Laptop 16-ab") or contains(.,"HP Envy x360 2-in-1 Laptop 14-fc0") or contains(.,"HP Envy x360 2-in-1 Laptop 16-ac") or contains(.,"HP Envy Laptop 17-da") or contains(.,"HP OmniBook X Laptop 14-fe1") or contains(.,"HP EliteBook Ultra G1q8 14 inch Notebook AI PC")or contains(.,"HP EliteBook X G1a 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook X Flip G1i 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook X G1i 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook 8 G1a") or contains(.,"HP ZBook 8 G1a")  or contains(.,"HP ZBook Ultra G1a") or contains(.,"HP OmniBook X Flip Laptop 14-fm") or contains(.,"HP OmniBook X Flip Laptop 14-fk") or contains(.,"HP OmniBook 7 Laptop 17-dc") or contains(.,"HP OmniBook X Laptop 17-dd") or contains(.,"HP OmniBook 7 Flip Laptop 16-au") or contains(.,"HP OmniBook X Flip Laptop 16-as") or contains(.,"HP OmniBook X Flip Laptop 16-ar") or contains(.,"HP OmniBook 7 Laptop 14-fr") or contains(.,"HP OmniBook 7 Laptop 14-fs")or contains(.,"HP OmniBook 7 Laptop 16-ay") or contains(.,"HP OmniBook 7 Laptop 16-az") or contains(.,"HP OmniBook 7 LaptopNGAI 16-bh") or contains(.,"HP OmniBook X Laptop 16-aw") or contains(.,"HP OmniBook X Flip Laptop 16-be")or contains(.,"HP ZBook Firefly 14 inch G12 Mobile Workstation PC") or contains(.,"HP ZBook Firefly 16 inch G12 Mobile Workstation PC") or contains(.,"HP EliteBook 8 G1i 14  Notebook AI PC") or contains(.,"HP EliteBook 8 G1i 14 inch Next Gen AI PC") or contains(.,"HP EliteBook 8 G1i 16 inch Next Gen AI PC") or contains(.,"HP EliteBook 8 G1i 16  Notebook AI PC") or contains(.,"HP EliteBook 8 G1a 14 inch Notebook Next Gen AI PC ") or contains(.,"HP EliteBook 8 G1a 16 inch Notebook Next Gen AI PC ") or contains(.,"HP EliteBook 8 G1a 14 inch Notebook AI PC") or contains(.,"HP EliteBook 8 G1a 16 inch Notebook AI PC") or contains(.,"HP ZBook 8 G1ah 14 inch Mobile Workstation PC ") or contains(.,"HP ZBook 8 G1ak 14 inch Mobile Workstation PC ") or contains(.,"HP ZBook 8 G1as 14 inch Mobile Workstation PC ") or contains(.,"HP EliteBook 1045 G1a 14 inch Notebook Next Gen AI PC") or contains(.,"HP EliteBook 1045 G1a 14 inch Notebook Next Gen AI PC") or contains(.,"HP ZBook Ultra 14 G1a Mobile Workstation PC") or contains(.,"HP OmniBook Ultra Flip Laptop 14-fh") or contains(.,"HP OMEN Transcend Gaming Laptop 14-fb")])', @GathererTypeId)
 
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
 	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.26100"]}')
@@ -54567,6 +54569,52 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-09-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 214636 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%HAPTest%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%HAPTest%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 214636 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(214636, 1, 0, 1, 1, 1, 0, 0, @TestCommandLineId, '[Contingency] Legacy Intel Systems Fail HAP Test''s "PreVolume" Tests', 'There have been concerns from partners about the implementation of the new TapPoint feature.', 'We agree to waive enforcement of the requirement for selected systems.', '2025-12-30T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode/HardwareID[starts-with(.,"PCI\VEN_8086&DEV_") and (contains(.,"54C8") or contains(.,"4DC8") or contains(.,"43C8") or contains(.,"A0C8") or contains(.,"7AD0") or contains(.,"51CC") or contains(.,"51C8") or contains(.,"51CE") or contains(.,"51CA") or contains(.,"7A50")) and (contains(.,"&CC_040380") or contains(.,"&CC_0401"))])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title', 'CHapTestNoDV.*PreVolumeMute#d*', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'VERIFY_ASCENDING_INCLUSIVE:.*fails to hold.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 214637 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -54652,6 +54700,49 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DISPLAY_BLOCK')
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
 	VALUES(@FilterId, 'Error', 'End', 'AreEqual\(CL_SUCCESS, cl.GetDeviceIDs\(platform, CL_DEVICE_TYPE_GPU, 1, &device, &devices\)\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 217331 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'wgf11resourceformats.exe%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('wgf11resourceformats.exe%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 217331 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(217331, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: WGF11 CheckFormatSupport test failure with RGB MPO support', 'WGF11 CheckFormatSupport is failing because recently a few RGB formats have been allowed to support MPO but this test is not updated. ', 'The test has been fixed in active branches, but not in Ge. We will need to fix and service this test change to Ge if possible.', '2025-12-30T16:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v10.0 Client x64 Ge OneCore","Windows v10.0 Client x64 Ge OneCoreUAP","Windows v10.0 Client x64 Ge Full","Windows v10.0 Server x64 Ge OneCore","Windows v10.0 Server x64 Ge OneCoreUAP","Windows v10.0 Server x64 Ge Full","Windows v10.0 Client ARM64 Ge OneCore","Windows v10.0 Client ARM64 Ge OneCoreUAP","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Server ARM64 Ge OneCore","Windows v10.0 Server ARM64 Ge OneCoreUAP","Windows v10.0 Server ARM64 Ge Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=CheckFormatSupport', 'CheckFormatSupport', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'StartTest', 'Msg:UserText=.*400000000000.*', 'CheckFormatSupport', 'Title', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
