@@ -15905,6 +15905,53 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2029-06-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 21623 v5.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging% configurableworkloadtest.dll /name:VidMm::ConfigurableWorkloadTest::FlipModes'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging% configurableworkloadtest.dll /name:VidMm::ConfigurableWorkloadTest::FlipModes')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 21623 AND Version = 5
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(21623, 5, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'TestFlipModes failures:  Hardware specific contingency', 'Older AMD WDDM 2.2 capable GPUs have a defect that prevents this feature from being supported correctly. ', 'Future release of the hardware should address this issue properly.', '2025-06-29T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 1, 'boolean(Devnode/CompatID[(string-length(.) = 21) and (starts-with(.,''PCI\VEN_1002'')) and (contains(.,''DEV_6860'') or contains(.,''DEV_687F'') or contains(.,''DEV_9550'') or contains(.,''DEV_6861'') or contains(.,''DEV_9100'') or contains(.,''DEV_6862'') or contains(.,''DEV_6863'') or contains(.,''DEV_6864'') or contains(.,''DEV_6867'') or contains(.,''DEV_6868'') or contains(.,''DEV_8100'') or contains(.,''DEV_686C'') or contains(.,''6790'') or contains(.,''699F'') or contains(.,''6981'')  or contains(.,''6987'')  or contains(.,''699F'')  or contains(.,''6980'')  or contains(.,''6985'')  or contains(.,''6986'')  or contains(.,''6995'')  or contains(.,''6997'') or contains(.,''6792'') or contains(.,''6798'') or contains(.,''6799'') or contains(.,''679A'') or contains(.,''679B'') or contains(.,''679E'') or contains(.,''6806'') or contains(.,''6808'') or contains(.,''6809'') or contains(.,''6810'') or contains(.,''6811'') or contains(.,''6818'') or contains(.,''6819'') or contains(.,''6828'') or contains(.,''6835'') or contains(.,''6837'') or contains(.,''6838'') or contains(.,''6839'') or contains(.,''683B'') or contains(.,''683D'') or contains(.,''683F'') or contains(.,''6800'') or contains(.,''6801'') or contains(.,''6820'') or contains(.,''6821'') or contains(.,''6822'') or contains(.,''6823'') or contains(.,''6824'') or contains(.,''6825'') or contains(.,''6826'') or contains(.,''6827'') or contains(.,''682A'') or contains(.,''682B'') or contains(.,''682C'') or contains(.,''682D'') or contains(.,''682F'') or contains(.,''6830'') or contains(.,''6831'') or contains(.,''684C'') or contains(.,''6780'') or contains(.,''6784'') or contains(.,''6788'') or contains(.,''678A'') or contains(.,''1305'') or contains(.,''1306'') or contains(.,''1307'') or contains(.,''1309'') or contains(.,''130A'') or contains(.,''130C'') or contains(.,''130D'') or contains(.,''130E'') or contains(.,''130F'') or contains(.,''1310'') or contains(.,''1311'') or contains(.,''1313'') or contains(.,''1315'') or contains(.,''1318'') or contains(.,''131C'') or contains(.,''131D'') or contains(.,''130B'') or contains(.,''1312'') or contains(.,''1316'') or contains(.,''1317'') or contains(.,''131B'') or contains(.,''9830'') or contains(.,''9831'') or contains(.,''9832'') or contains(.,''9833'') or contains(.,''9834'') or contains(.,''9835'') or contains(.,''9836'') or contains(.,''9837'') or contains(.,''9838'') or contains(.,''9839'') or contains(.,''983D'') or contains(.,''9850'') or contains(.,''9851'') or contains(.,''9852'') or contains(.,''9853'') or contains(.,''9854'') or contains(.,''9855'') or contains(.,''9856'') or contains(.,''9857'') or contains(.,''9858'') or contains(.,''9859'') or contains(.,''985A'') or contains(.,''985B'') or contains(.,''985C'') or contains(.,''985D'') or contains(.,''985E'') or contains(.,''985F'') or contains(.,''9920'') or contains(.,''9922'') or contains(.,''9923'') or contains(.,''9924'') or contains(.,''6610'') or contains(.,''6611'') or contains(.,''6613'') or contains(.,''6617'') or contains(.,''6631'') or contains(.,''6650'') or contains(.,''6651'') or contains(.,''6658'') or contains(.,''665C'') or contains(.,''665D'') or contains(.,''665F'') or contains(.,''6600'') or contains(.,''6601'') or contains(.,''6602'') or contains(.,''6603'') or contains(.,''6606'') or contains(.,''6607'') or contains(.,''6620'') or contains(.,''6621'') or contains(.,''6623'') or contains(.,''6604'') or contains(.,''6605'') or contains(.,''6646'') or contains(.,''6647'') or contains(.,''6640'') or contains(.,''6641'') or contains(.,''6660'') or contains(.,''6663'') or contains(.,''6664'') or contains(.,''6665'') or contains(.,''6667'') or contains(.,''666F'') or contains(.,''6608'') or contains(.,''6649'') or contains(.,''7300'') or contains(.,''9874'') or contains(.,''98C0'') or contains(.,''98CD'') or contains(.,''98E4'') or contains(.,''67A2'') or contains(.,''67B0'') or contains(.,''67B1'') or contains(.,''67B8'') or contains(.,''67B9'') or contains(.,''67BA'') or contains(.,''67BE'') or contains(.,''6930'') or contains(.,''6938'') or contains(.,''6939'') or contains(.,''6900'') or contains(.,''6901'') or contains(.,''6902'') or contains(.,''6903'') or contains(.,''6907'') or contains(.,''6920'') or contains(.,''6921'') or contains(.,''67A0'') or contains(.,''67A1'') or contains(.,''6929'') or contains(.,''692B'') or contains(.,''692F'') or contains(.,''67DF'') or contains(.,''67EF'') or contains(.,''67FF'') or contains(.,''67C0'') or contains(.,''67C1'') or contains(.,''67C2'') or contains(.,''67C4'') or contains(.,''67C7'') or contains(.,''67E0'') or contains(.,''67E3'') or contains(.,''67E8'') or contains(.,''67EB'') or contains(.,''694C'') or contains(.,''694E''))])')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'VidMm::ConfigurableWorkloadTest::FlipModes', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', '.*Test Host Process could not be reached.*It has terminated with an exit code of.*The message to invoke a test operation was not properly handled by the host process.*', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'AreEqual\(frameStats.PresentCount . previousPresentCount. listenerContext.*stableFrameRate\) - Values \(1, 2\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 21885 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -47819,6 +47866,74 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 167926 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '[[]WttRunWorkingDir]\ptlogo.exe%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('[[]WttRunWorkingDir]\ptlogo.exe%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 167926 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(167926, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata:Test.SelectiveReporting | Test.Buffering | Test.StationaryJitterMultiple failures on Win10', 'This is an acceptable failure', 'This is an acceptable failure', '2025-06-29T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 1, 'boolean(//Devnode[contains(.,''Surface HID Touchpad'')])')
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":2,"Values":["10.1.19041","10.1.22621"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Selective Reporting', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'End', 'Iteration 1: failed: you must run this test elevated', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Buffering', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'End', 'Iteration 1: failed: [[]HID 8] Invalid contact ID \(Not present\) [[]HID 8] Invalid contact ID \(Not present\) [[]HID 5]', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Stationary Jitter \(Multiple\)', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Msg', 'End', 'Iteration 1: failed: [[]HID 8] Invalid contact ID \(Not present\) [[]HID 8] Invalid contact ID \(Not present\) [[]HID 5]', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 167927 v5.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -50801,6 +50916,44 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 190297 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%voiceclarityhlktest.dll%HLKTestLoopbackSample::RunTest%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%voiceclarityhlktest.dll%HLKTestLoopbackSample::RunTest%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 190297 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(190297, 1, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'Voice Clarity HLK Test Loopback Sample waiver for LUL', 'Starting with Windows 11 24H2, applications and APOs can request a speaker loopback stream tapped before or after the volume control. This test verifies that the pre-volume loopback is not scaled by the render volume control. All loopback channels must satisfy the test requirement.', 'OEM must relocate the render loopback sample point to a location before the render volume control prior to the expiration of this contingency waiver.', '2025-06-29T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK')
+		INSERT INTO GathererType([Name]) VALUES ('DEVNODE_BLOCK')
+	SELECT @GathererTypeId = Id FROM GathererType WHERE Name = 'DEVNODE_BLOCK'
+	INSERT INTO FilterConstraint(FilterId, Type, Query, GathererTypeId)
+	VALUES(@FilterId, 2, 'boolean(//Devnode/DeviceID[contains(.,"SOUNDWIRE\SDCA_08&MAN_025D&FUNC_1320&TYPE_03&VER_01&ADR_02&LID_00&UID_00&SUBSYS_307010EC&DYNAMICENUMMICROPHONE0") or contains(.,"SOUNDWIRE\SDCA_08&MAN_025D&FUNC_1320&TYPE_03&VER_01&ADR_02&LID_00&UID_00&SUBSYS_307210EC&DYNAMICENUMMICROPHONE0") or contains(.,"SOUNDWIRE\SDCA_08&MAN_025D&FUNC_1320&TYPE_03&VER_01&ADR_02&LID_00&UID_00&SUBSYS_307410EC&DYNAMICENUMMICROPHONE0") or contains(.,"SOUNDWIRE\SDCA_08&MAN_025D&FUNC_1320&TYPE_03&VER_01&ADR_02&LID_00&UID_00&SUBSYS_307A10EC&DYNAMICENUMMICROPHONE0")])', @GathererTypeId)
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Error', 'Error', 'IsLessThanOrEqual(LevelDifference_dB - ExpectedDifference_dB, TestPassTolerance_dB)*', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 190397 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -52610,6 +52763,68 @@ BEGIN
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-09-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 213934 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = '%lullaby2%'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('%lullaby2%')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 213934 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(213934, 1, 0, 1, 1, 1, 0, 0, @TestCommandLineId, 'Lullaby Test Failure', 'Some devices are failing hibernation tests.', 'Due to the nature of the fixes, we agree to waive this issue until it can be properly resolved.', '2025-06-29T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"KitVersion","MatchType":1,"Values":["10.1.22621"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Lullaby Test\\Hibernate\(SH\)\\WASAPI Render Sync', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Error', 'Failed IAudioStreamingRender::Initialize\(\) \(hr = AUDCLNT_E_UNSUPPORTED_FORMAT\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Error', 'Failed Create Rendering Device \(hr = AUDCLNT_E_UNSUPPORTED_FORMAT\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Lullaby Test\\Hibernate\(SH\)\\WASAPI Render Offload Sync', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Error', 'Failed IAudioStreamingRender::Initialize\(\) \(hr = AUDCLNT_E_DEVICE_INVALIDATED\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', 'Error', 'Failed Create Rendering Device \(hr = AUDCLNT_E_DEVICE_INVALIDATED\)', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 214228 v1.
 SET @TestCommandLineId = NULL
