@@ -33605,7 +33605,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 81975 AND Version = 5
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(81975, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Key Attestation Test - Large RSA Export Blob', 'Static sized claim blob is too small.', 'Fixed in the next Windows kit release.', '2025-09-30T17:00:00')
+	VALUES(81975, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Key Attestation Test - Large RSA Export Blob', 'Static sized claim blob is too small.', 'Fixed in the next Windows kit release.', '2026-09-30T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -33754,7 +33754,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-09-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-09-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 81998 v2.
 SET @TestCommandLineId = NULL
@@ -53199,7 +53199,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-05-03T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 242605 v1.
+-- Inserting filter 242605 v2.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -53214,11 +53214,11 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 242605 AND Version = 1
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 242605 AND Version = 2
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(242605, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'D3D12 AV1 Decoder Playback Tests fail on SUCCEEDED', 'AV1 Profile0 Playback Test failure - couple of the newer D3D12 AV1 decoder tests released for 25H2 are failing that needs further investigation.', 'The tests were initially passing when added to playlist - expecting to be able to close out on the issue soon.', '2026-11-09T16:00:00')
+	VALUES(242605, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'D3D12 AV1 Decoder Playback Tests fail on SUCCEEDED', 'AV1 Profile0 Playback Test failure - couple of the newer D3D12 AV1 decoder tests released for 25H2 are failing that needs further investigation.', 'The tests were initially passing when added to playlist - expecting to be able to close out on the issue soon.', '2026-11-09T16:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -53228,6 +53228,9 @@ BEGIN
 
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
 	VALUES(@FilterId, 'StartTest', 'Error:UserText=SUCCEEDED(spSWReader->ReadSample(MF_SOURCE_READER_FIRST_VIDEO_STREAM,0,nullptr,&dwSWStreamFlags,nullptr,&spSWSample))', 'CPlaybackQualityTests::.*AV1_Profile0PlaybackQualityTest.*', 'Title', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'Error:UserText=Checksums don''t match', 'CPlaybackQualityTests::.*AV1_Profile2PlaybackQualityTest.*', 'Title', 0, 0)
 
 	DELETE FROM @ParentNodes
 END
