@@ -21119,6 +21119,44 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-02-28T23:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 34826 v4.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'WGF11Blend.exe'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('WGF11Blend.exe')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 34826 AND Version = 4
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(34826, 4, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'WGF11Blend is failing for P010 surfaces', 'Test is validating the high 6 bits of the P010 format, which are allowed to be undefined.', 'We will filter the failures until RS5.', '2050-07-01T01:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client ARM64 RS4 Full","Windows v10.0 Client ARM64 RS4 OneCoreUAP","Windows v10.0 Client ARM RS4 OneCoreUAP","Windows v10.0 Client ARM64 RS5 Full","Windows v10.0 Client ARM64 19H1 Full","Windows v10.0 Client ARM64 25H2 Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'Blend.*Format.*P010', 'Title', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'Msg', '', 'Color mismatch', 'UserText', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2050-07-01T01:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 34867 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -52009,6 +52047,38 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-10-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
+-- Inserting filter 234678 v2.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash d3dconf_11_core.dll /name:Conf11_Displayable::* [CustomTaefCommandArgs]'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash d3dconf_11_core.dll /name:Conf11_Displayable::* [CustomTaefCommandArgs]')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 234678 AND Version = 2
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(234678, 2, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'D3D11 - Displayable Surfaces and Flexible Presentation is checking driver supports 999E5 in D3D11 but the implementation on how this is checked is incorrect. ', 'There exists a bug within Conf11_Displayable::TestBasicScenarios where the test would check if the driver supports 999E5 in D3D11. This check was implemented wrongly at the test level.', 'The test has since been fixed to check 999E5 support correctly. As we don''t service HLK fixes, this errata will unblock our vendors until they receive an updated HLK next year.', '2026-04-29T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=Conf11_Displayable::TestBasicScenarios', 'Conf11_Displayable::TestBasicScenarios', 'Title', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-04-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
 -- Inserting filter 235285 v1.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
@@ -52911,6 +52981,54 @@ Partners are seeing failures because they don''t include these ''generic'' guids
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-03-30T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 250670 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash hlk.bluetooth.singledevicetests.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash hlk.bluetooth.singledevicetests.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 250670 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(250670, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK Errata: Bluetooth LE Audio VSAP (Broadcast) - 32KHz tests', 'Test failure for following tests:
+Bluetooth LE Audio VSAP (Broadcast) - [Render] Default, 32_1, 1 channel
+Bluetooth LE Audio VSAP (Broadcast) - [Render] Default, 32_1, 2 channels
+Bluetooth LE Audio VSAP (Broadcast) - [Render] Default, 32_2, 1 channel
+Bluetooth LE Audio VSAP (Broadcast) - [Render] Default, 32_2, 2 channels', 'This is an acceptable failure.', '2026-04-29T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 Ge Full","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Server x64 Ge Full","Windows v10.0 Server ARM64 Ge Full","Windows v10.0 Client x64 25H2 Full","Windows v10.0 Server x64 25H2 Full","Windows v10.0 Client ARM64 25H2 Full","Windows v10.0 Server ARM64 25H2 Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'LEAudioVSAPBroadcastValidator::Test_Render_DEFAULT_32_1_Ch1', 'Title', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'LEAudioVSAPBroadcastValidator::Test_Render_DEFAULT_32_1_Ch2', 'Title', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'LEAudioVSAPBroadcastValidator::Test_Render_DEFAULT_32_2_Ch1', 'Title', 0, 0)
+
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest', 'LEAudioVSAPBroadcastValidator::Test_Render_DEFAULT_32_2_Ch2', 'Title', 0, 0)
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-04-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 
 -- Deprecating filter 6994 v1.
