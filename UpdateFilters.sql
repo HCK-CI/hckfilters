@@ -4163,7 +4163,7 @@ IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
 	VALUES(5533, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'HLK: Bitlocker AOAC tests do not apply to NonAOAC machines.  Some NonAOAC machines will fail due to no TPMv2.', 'Bitlocker AOAC tests are being incorrectly mapped to NonAOAC machines.  
-', 'Please disregard failure of Bitlocker AOAC tests on NonAOAC machines.   Submit the test package with the failed tests and they will be manually waived. The Bitlocker TPM and Recovery Password tests for AOAC devices with PCR [7] will fail in task Verify that the system is AOAC, for which this filter will overturn. The rest of the faling tasks in this job are covered by this waiver. ', '2025-12-30T16:00:00')
+', 'Please disregard failure of Bitlocker AOAC tests on NonAOAC machines.   Submit the test package with the failed tests and they will be manually waived. The Bitlocker TPM and Recovery Password tests for AOAC devices with PCR [7] will fail in task Verify that the system is AOAC, for which this filter will overturn. The rest of the faling tasks in this job are covered by this waiver. ', '2026-06-29T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -4180,7 +4180,7 @@ IF NOT EXISTS (	SELECT Id FROM GathererType WHERE Name = 'RUNTIME_BLOCK')
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2025-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 5531 v5.
 SET @TestCommandLineId = NULL
