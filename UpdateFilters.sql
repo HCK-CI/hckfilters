@@ -37122,7 +37122,7 @@ END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2030-12-30T16:00:00' WHERE Id = @FilterId AND [Status] = 0
 
--- Inserting filter 99537 v5.
+-- Inserting filter 99537 v6.
 SET @TestCommandLineId = NULL
 SET @FilterId = NULL
 SET @GathererTypeId = NULL
@@ -37137,16 +37137,16 @@ BEGIN
 END
 
 -- Inserting core filter details
-SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 99537 AND Version = 5
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 99537 AND Version = 6
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(99537, 5, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Delayed Enforcement Errata: short term solution proposed removal of DFx support Qualcomm I2C device, to avoid BSODs in framework', 'Delayed Enforcement Errata: short term solution proposed removal of DFx support Qualcomm I2C device, to avoid BSODs in framework', 'This is an acceptable failure', '2026-10-07T17:00:00')
+	VALUES(99537, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Delayed Enforcement Errata: short term solution proposed removal of DFx support Qualcomm I2C device, to avoid BSODs in framework', 'Delayed Enforcement Errata: short term solution for QC SoundWire and Camera devices on 8480', 'This is an acceptable failure', '2026-10-07T17:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
 	INSERT INTO FilterConstraint(FilterId, Type, Query)
-	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v10.0 Client ARM64 Co Full","Windows v10.0 Client ARM64 Ni Full","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Client ARM64 Br Full"]}')
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":2,"Values":["Windows v10.0 Client ARM64 Co Full","Windows v10.0 Client ARM64 Ni Full","Windows v10.0 Client ARM64 Ge Full","Windows v10.0 Client ARM64 26H1 Full"]}')
 
 -- Inserting filter log nodes
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
@@ -37160,7 +37160,15 @@ BEGIN
 
 	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
 	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
-	VALUES(@FilterId, 'Error', '!Error', 'Device ''Qualcomm\(R\) I2C Bus Device \(.+\)'' does not support DFX', 'UserText', 0, 0, @ParentLogNodeId)
+	VALUES(@FilterId, 'Error', '!Error', 'failed because device ''PCI\\VEN_17CB&DEV_0309&SUBSYS_030917CB&REV_00\\4&cb75bc2&0&0000'' does not support DFX', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!Error', 'failed because device ''Qualcomm\(R\) Spectra\(TM\)  ISP Camera Front Sensor Device \(.+\)'' does not support DFX', 'UserText', 0, 0, @ParentLogNodeId)
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!Error', 'failed because device ''Qualcomm\(R\) Aqstic\(TM\) SoundWire Controller \(.+\)'' does not support DFX', 'UserText', 0, 0, @ParentLogNodeId)
 
 	DELETE FROM @ParentNodes WHERE Depth >= 1
 
@@ -51812,6 +51820,52 @@ BEGIN
 END
 ELSE
 UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-06-29T17:00:00' WHERE Id = @FilterId AND [Status] = 0
+
+-- Inserting filter 265828 v1.
+SET @TestCommandLineId = NULL
+SET @FilterId = NULL
+SET @GathererTypeId = NULL
+SET @ParentLogNodeId = NULL
+
+-- Inserting test command line
+SELECT @TestCommandLineId = Id FROM TestCommandLine WHERE CommandLine = 'TE.exe /enablewttlogging /appendwttlogging /errorOnCrash infverifhlk.dll'
+IF @TestCommandLineId IS NULL
+BEGIN
+	INSERT INTO TestCommandLine(CommandLine) VALUES('TE.exe /enablewttlogging /appendwttlogging /errorOnCrash infverifhlk.dll')
+	SELECT @TestCommandLineId = SCOPE_IDENTITY()
+END
+
+-- Inserting core filter details
+SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 265828 AND Version = 1
+IF @FilterId IS NULL
+BEGIN
+	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
+	VALUES(265828, 1, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'InfVerif DIRID 10', 'InfVerif::RunInfVerif test fail due to DIRID ''10'' not allowed.', 'Temporarily allow this.', '2026-05-31T17:00:00')
+	SELECT @FilterId = SCOPE_IDENTITY()
+
+-- Inserting filter constraints
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 1, 'boolean(//Devnode/Enumerator[.="UEFI"] and //Devnode/Manufacturer[.="HP"])')
+
+	INSERT INTO FilterConstraint(FilterId, Type, Query)
+	VALUES(@FilterId, 0, '{"Field":"LogoOSPlatform","MatchType":0,"Values":["Windows v10.0 Client x64 25H2 OneCore","Windows v10.0 Client x64 25H2 OneCoreUAP","Windows v10.0 Client x64 25H2 Full","Windows v10.0 Server x64 25H2 OneCore","Windows v10.0 Server x64 25H2 OneCoreUAP","Windows v10.0 Server x64 25H2 Full","Windows v10.0 Client ARM64 25H2 OneCore","Windows v10.0 Client ARM64 25H2 OneCoreUAP","Windows v10.0 Client ARM64 25H2 Full","Windows v10.0 Server ARM64 25H2 OneCore","Windows v10.0 Server ARM64 25H2 OneCoreUAP","Windows v10.0 Server ARM64 25H2 Full"]}')
+
+-- Inserting filter log nodes
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce)
+	VALUES(@FilterId, 'StartTest', 'EndTest:Title=InfVerif::RunInfVerif', 'InfVerif::RunInfVerif', 'Title', 0, 0)
+
+	INSERT INTO @ParentNodes(ParentNodeId, Depth) SELECT SCOPE_IDENTITY(), 1
+
+	SELECT @ParentLogNodeId = ParentNodeId FROM @ParentNodes WHERE Depth = 1
+	INSERT INTO FilterLogNode(FilterId, StartTag, EndTag, Regex, Attribute, RequireAllClear, IsMatchOnce, ParentId)
+	VALUES(@FilterId, 'Error', '!', 'Code 1340,.*Specified DIRID ''10'' not allowed.', 'UserText', 0, 0, @ParentLogNodeId)
+
+	DELETE FROM @ParentNodes WHERE Depth >= 1
+
+	DELETE FROM @ParentNodes
+END
+ELSE
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-05-31T17:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 265832 v1.
 SET @TestCommandLineId = NULL
