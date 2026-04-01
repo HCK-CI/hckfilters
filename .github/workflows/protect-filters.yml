@@ -1,0 +1,35 @@
+name: Protect critical filters
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  protect:
+    name: Fail if protected filters are deleted or version-bumped
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for git show)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check protected filters
+        run: |
+          python .github/scripts/check_protected_filters.py \
+            --protected protected_filters.json \
+            --sql UpdateFilters.sql \
+            --base-sha "${BASE_SHA}" \
+            --head-sha "${HEAD_SHA}"
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+

@@ -1,0 +1,36 @@
+{
+  "filters": [
+    {
+      "filterNumber": 2817,
+      "version": 2
+    },
+    {
+      "filterNumber": 5226,
+      "version": 8
+    },
+    {
+      "filterNumber": 5229,
+      "version": 9
+    },
+    {
+      "filterNumber": 20801,
+      "version": 3
+    },
+    {
+      "filterNumber": 40325,
+      "version": 9
+    },
+    {
+      "filterNumber": 166032,
+      "version": 11
+    },
+    {
+      "filterNumber": 174211,
+      "version": 3
+    },
+    {
+      "filterNumber": 254655,
+      "version": 3
+    }
+  ]
+}
