@@ -59,7 +59,7 @@ jobs:
           git add .
           git commit -m "${COMMIT_TITLE}"
           git push --set-upstream origin "${SOURCE_BRANCH}"
-          gh pr create --title "${COMMIT_TITLE}" --body "${COMMIT_TITLE}" --base "${DEST_BRANCH}" --head "${SOURCE_BRANCH}"
+          gh pr create --draft --title "${COMMIT_TITLE}" --body "${COMMIT_TITLE}" --base "${DEST_BRANCH}" --head "${SOURCE_BRANCH}"
         env:
           SOURCE_BRANCH: bump-${{ steps.date.outputs.date }}
           DEST_BRANCH: master
