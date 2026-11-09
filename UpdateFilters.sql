@@ -125,7 +125,7 @@ SELECT @FilterId = Id FROM Filter WHERE FilterNumber = 994 AND Version = 6
 IF @FilterId IS NULL
 BEGIN
 	INSERT INTO Filter(FilterNumber, Version, Type, Status, IsLogRequired, IsResultRequired, ShouldFilterNotRuns, ShouldFilterAllZeros, TestCommandLineId, Title, IssueDescription, IssueResolution, ExpirationDate)
-	VALUES(994, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Failing to get HBA device instance on certain HBAs', 'Failed to recognize HDLM DSM', 'Structural change to installpnpfiltr.cpp', '2026-12-31T00:00:00')
+	VALUES(994, 6, 1, 1, 1, 1, 0, 0, @TestCommandLineId, 'Failing to get HBA device instance on certain HBAs', 'Failed to recognize HDLM DSM', 'Structural change to installpnpfiltr.cpp', '2027-06-30T00:00:00')
 	SELECT @FilterId = SCOPE_IDENTITY()
 
 -- Inserting filter constraints
@@ -159,7 +159,7 @@ BEGIN
 	DELETE FROM @ParentNodes
 END
 ELSE
-UPDATE Filter SET [Status] = 1, ExpirationDate = '2026-12-31T00:00:00' WHERE Id = @FilterId AND [Status] = 0
+UPDATE Filter SET [Status] = 1, ExpirationDate = '2027-06-30T00:00:00' WHERE Id = @FilterId AND [Status] = 0
 
 -- Inserting filter 5984 v2.
 SET @TestCommandLineId = NULL
